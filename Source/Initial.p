@@ -1065,7 +1065,7 @@ interface
 				RFDo: (RFOne, RFTwo, RFThree, RFFour, RFFive, RFSix, RFSeven, RFEight);
 				ChatDo: (ChatOne, ChatTwo, ChatThree);
 				NodeDo: (NodeOne, NodeTwo, NodeThree, NodeFour, NodeFive, NodeSix, NodeSeven);
-				PostDo: (PostOne, PostTwo, PostThree, PostFour, PostFive);
+				PostDo: (PostOne, PostTwo, PostThree, PostFour, PostFive, PostSix, PostSeven);
 				UploadDo: (UpOne, UpTwo, UpRob, UpThree, UpFour, UpFive, UpSix, UpSeven, UpEight);
 				ListDo: (ListOne, ListTwo, ListThree, ListFour, ListFive, ListSix, ListSeven, ListEight);
 				QDo: (Qone, QTwo, QThree, QFour, QFive, QSix, QMove, QMove2, QSeven, QEight);
@@ -1164,7 +1164,7 @@ interface
 				ChatRoomDo: (EnterMain, ChatAEM1, ChatAEM2, ChatAEM3, ChatAEM4, ChatEM1, ChatEM2, ChatEM3, ChatEM4, ChatCheckPrompt, ChatSendTo, ChatSysop1, ChatSysop2, ChatSysop3, ChatBlockWho, ChatScroll, ChatScrollCheckP, ChatPrivate1, ChatPrivate2, ChatPrivate3);
 				ABDo: (AB1, AB2, AB3, AB4, AB5, AB6, AB7, AB8, AB9, AB10, AB11, AB12);
 				PrivateDo: (PR1, PR2, PR3);
-				MessSearchDo: (MSearch1, MSearch2, MSearch3, MSearch4, MSearch5, MSearch6, MSearch7, MSearch8, MSearch9, MSearch10, MSearch11, MSearch12, MSearch13, MSearch14, MSearch15, MSearch16, MSearch17, MSearch18, MSearch19, MSearch20, MSearch21, MSearch22, MSearch23, MSearch24, MSearch25);
+				MessSearchDo: (MSearch1, MSearch2, MSearch3, MSearch4, MSearch5, MSearch6, MSearch7, MSearch8, MSearch9, MSearch10, MSearch11, MSearch12, MSearch13, MSearch14, MSearch15, MSearch16, MSearch17, MSearch18, MSearch19, MSearch20, MSearch21a, MSearch21b, MSearch21c, MSearch22, MSearch23, MSearch24, MSearch25);
 				MessageSearch: MessageSearchHand;
 				wasSearching, noPause: boolean;
 { Added in 3.5.9b1 }

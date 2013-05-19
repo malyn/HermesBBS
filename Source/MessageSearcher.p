@@ -993,7 +993,7 @@ implementation
 						end
 						else
 							curPrompt := 'N';
-						MessSearchDo := MSearch21;
+						MessSearchDo := MSearch21a;
 					end
 					else
 					begin
@@ -1002,11 +1002,25 @@ implementation
 						MessSearchDo := MSearch17;
 					end;
 				end;
-				MSearch21: {Save The Message}
+				MSearch21a: {Save The Message}
 				begin
 					OutLine(RetInStr(180), true, 0);				{Saving...}
 					if MConference[inForum]^^[inConf].ConfType <> 0 then
+						MessSearchDo := MSearch21b
+					else
+						MessSearchDo := MSearch21c;
+				end;
+				MSearch21b: 
+				begin
+				{ We can only save the post if the Web Tosser is not polling. }
+					if not arePollingWebTosser then
+					begin
 						SaveNetPost;
+						MessSearchDo := MSearch21c;
+					end;
+				end;
+				MSearch21c: 
+				begin
 					if reply and not MConference[inForum]^^[inConf].Threading then
 					begin
 						AddLine('');

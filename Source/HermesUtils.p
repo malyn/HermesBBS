@@ -1336,7 +1336,21 @@ implementation
 				begin
 					OutLine(RetInStr(180), true, 0);				{Saving...}
 					if MConference[inForum]^^[inConf].ConfType <> 0 then
-						SaveNetpost;
+						PostDo := PostSix
+					else
+						PostDo := PostSeven;
+				end;
+				PostSix: 
+				begin
+				{ We can only save the post if the Web Tosser is not polling. }
+					if not arePollingWebTosser then
+					begin
+						SaveNetPost;
+						PostDo := PostSeven;
+					end;
+				end;
+				PostSeven: 
+				begin
 					if reply and not MConference[inForum]^^[inConf].Threading then
 					begin
 						AddLine('');
