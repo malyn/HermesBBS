@@ -987,45 +987,55 @@ implementation
 				else if ((serKe = char($AE)) or ((Mailer^^.UseEMSI) and (Pos('EMSI_INQ', curPrompt) <> 0))) and (BoardSection = Logon) and ((LogonStage = Welcome) or (LogonStage = Name)) then
 				begin
 					if mailer^^.MailerAware and doCrashmail then
-					begin
-						result := SetVol(nil, homeVol);
-						result := Create(concat(mailer^^.eventpath, 'connect.bbs'), 0, 'HRMS', 'CNCT');
-						result := FSOpen(concat(mailer^^.eventpath, 'connect.bbs'), 0, tempint);
-						NumToString(currentBaud, tempstring);
-						NumToBaud(maxBaud, tempint2);
-						if not matchInterface then
-							NumToString(tempint2, tempstring);
-						if inportName = '.AIn' then
-							tempstring := concat('a', tempstring)
-						else
-							tempstring := concat('b', tempstring);
-						tempint2 := length(tempstring);
-						result := FSWrite(tempint, tempint2, @tempstring[1]);
-						result := FSClose(tempint);
-						LogThis(RetInStr(8), 6);
-						if mailer^^.SubLaunchMailer = 1 then
+						if Mailer^^.SubLaunchMailer = 3 then
 						begin
-							TabbyQuit := NotTabbyQuit;
-							CloseComPort;
-							TabbyPaused := true;
-							SavedInPort := InportName;
-							InPortName := '';
-							OpenComPort;
-							GoWaitMode;
-							LaunchMailer(True);
-						end
-						else if mailer^^.SubLaunchMailer = 2 then
-						begin
-							HandleAECrashMail;
-						end
-						else if (mailer^^.SubLaunchMailer = 0) and (not isGeneric) then
-						begin
-							TabbyQuit := CrashMail;
-							quit := 1;
-						end
-						else
+							if (nodeType = 3) and (not arePollingWebTosser) and (not shouldPollWebTosser) then
+							begin
+								WriteNetLog(Concat('Web Tosser received crashmail request at: ', WhatTime(-1)));
+								shouldPollWebTosser := true;
+							end;
 							HangUpAndReset;
-					end;
+						end
+						else
+						begin
+							result := SetVol(nil, homeVol);
+							result := Create(concat(mailer^^.eventpath, 'connect.bbs'), 0, 'HRMS', 'CNCT');
+							result := FSOpen(concat(mailer^^.eventpath, 'connect.bbs'), 0, tempint);
+							NumToString(currentBaud, tempstring);
+							NumToBaud(maxBaud, tempint2);
+							if not matchInterface then
+								NumToString(tempint2, tempstring);
+							if inportName = '.AIn' then
+								tempstring := concat('a', tempstring)
+							else
+								tempstring := concat('b', tempstring);
+							tempint2 := length(tempstring);
+							result := FSWrite(tempint, tempint2, @tempstring[1]);
+							result := FSClose(tempint);
+							LogThis(RetInStr(8), 6);
+							if mailer^^.SubLaunchMailer = 1 then
+							begin
+								TabbyQuit := NotTabbyQuit;
+								CloseComPort;
+								TabbyPaused := true;
+								SavedInPort := InportName;
+								InPortName := '';
+								OpenComPort;
+								GoWaitMode;
+								LaunchMailer(True);
+							end
+							else if mailer^^.SubLaunchMailer = 2 then
+							begin
+								HandleAECrashMail;
+							end
+							else if (mailer^^.SubLaunchMailer = 0) and (not isGeneric) then
+							begin
+								TabbyQuit := CrashMail;
+								quit := 1;
+							end
+							else
+								HangUpAndReset;
+						end;
 				end
 				else if (BoardAction = Writing) then		(*Entering Message*)
 				begin
