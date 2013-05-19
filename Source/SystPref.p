@@ -469,7 +469,7 @@ implementation
 							send.userDataPtr := nil;
 						end;
 
-						result := PBControl(ParmBlkPtr(curGlobs^.nodeTCP.tcpPBPtr), false);
+						result := PBControl(ParmBlkPtr(curGlobs^.nodeTCP.tcpPBPtr), true);
 					end;
 				end;
 			end;
