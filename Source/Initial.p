@@ -1517,6 +1517,7 @@ interface
 { Added in 3.5.10b2 }
 		runtimeExternalNum: integer;
 { Added in 3.5.11b2 }
+		lastFailedWebTosserAutoPoll: longint;
 		shouldPollWebTosser, arePollingWebTosser: boolean;
 		debugWebTosser, debugWebTosserToFile, debugWebTosserOnce, debugWebTosserToFileOnce: boolean;
 		webTosserDo, webTosserDoNext, webTosserDoNextFile: (WebTosserConnect, WebTosserConnectWait, WebTosserSendNodeNumber, WebTosserSendPassword, WebTosserSendAreasBBSHeader, WebTosserSendAreasBBSFile, WebTosserSendGenericExportHeader, WebTosserSendGenericExportFile, WebTosserSendRequestTrailer, WebTosserReceiveGenericImport, WebTosserSend, WebTosserSendFile, WebTosserSendWait, WebTosserDisconnect, WebTosserDisconnectWait, WebTosserDone);

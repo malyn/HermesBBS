@@ -1083,12 +1083,29 @@ program Hermes;
 			{ Check for a new Generic Import file every 20 seconds as long as we are not already processing a }
 			{ Generic Import file or polling the web tosser.  Initialize the ImportCount if we find a Generic Import file. }
 			{ isGeneric is set to true by doCheckForGeneric.  The next run through this loop will move to the }
-			{ second phase of the process which is where the import itself actually happens. }
-				if (lastGenericCheck + 1200 < tempLong) and (not isGeneric) and (not arePollingWebTosser) then {was 3600}
+			{ second phase of the process which is where the import itself actually happens.  If we do not have a Generic }
+			{ Import file, then see if we have are using the Web Tosser, support crashmail, have waited long enough since }
+			{ the last failed Web Tosser auto-poll, and have a Generic Export file.  Poll the Web Tosser if all of those things }
+			{ are true. }
+				if (lastGenericCheck + 1200 < tempLong) and (not isGeneric) and (not shouldPollWebTosser) and (not arePollingWebTosser) then {was 3600}
 				begin
 					doCheckForGeneric;	(* Check for a generic file *)
 					if isGeneric then (* Generic File Was There *)
-						ImportCount := 1;
+						ImportCount := 1
+					else if (Mailer^^.SubLaunchMailer = 3) and Mailer^^.AllowCrashmail and ((lastFailedWebTosserAutoPoll + (60 * 60 * 15)) < tempLong) then
+						if FSOpen(concat(mailer^^.GenericPath, 'Generic Export'), 0, i) = noErr then
+						begin
+						{ Close the Generic Export file. }
+							result := FSClose(i);
+
+						{ Temporarily set the last-failed timer to now; the Web Tosser will clear this value if the poll is }
+						{ successful.  This prevents us from polling more than every 15 minutes if something is wrong. }
+							lastFailedWebTosserAutoPoll := tempLong;
+
+						{ Poll the Web Tosser. }
+							WriteNetLog(Concat('Web Tosser found a Generic Export file; auto-polling the server at: ', WhatTime(-1)));
+							shouldPollWebTosser := true;
+						end;
 				end
 			{ Is there a new Generic Import file?  If so, import the file. }
 				else if isGeneric then
@@ -1147,7 +1164,7 @@ program Hermes;
 					end;
 				end
 			{ No new Generic Import, and we're not importing mail; do we need to run the web tosser loop? }
-				else if shouldPollWebTosser or arePollingWebTosser then
+				else if (Mailer^^.SubLaunchMailer = 3) and shouldPollWebTosser or arePollingWebTosser then
 				begin
 				{ Start up the web tosser loop if we have not done so already. }
 					if shouldPollWebTosser and (not arePollingWebTosser) then
@@ -1712,6 +1729,7 @@ begin
 			GBytes := 0;
 			lastGenericCheck := 0;
 			isGeneric := false;
+			lastFailedWebTosserAutoPoll := 0;
 			shouldPollWebTosser := false;
 			arePollingWebTosser := false;
 			debugWebTosser := false;

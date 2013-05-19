@@ -433,6 +433,9 @@ implementation
 						result := FSDelete(Concat(Mailer^^.GenericPath, 'Generic Export'), 0);
 					end;
 
+					{ Web Tosser poll was successfull; clear the last-failed timer. }
+					lastFailedWebTosserAutoPoll := 0;
+
 					webTosserDo := WebTosserDisconnect;
 				end
 				else if result <> noErr then
