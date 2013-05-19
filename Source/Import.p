@@ -5,6 +5,7 @@ interface
 	uses
 		AppleTalk, ADSP, Serial, Sound, TCPTypes, Initial, LoadAndSave, Message_Editor, NodePrefs2, NodePrefs, SystemPrefs2;
 
+	procedure WriteNetLog (what: str255);
 	procedure doDetermineZMH;
 	procedure doCheckForGeneric;
 	procedure doMailerImport;

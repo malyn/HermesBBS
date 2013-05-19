@@ -3,7 +3,7 @@ unit WebTosser;
 
 interface
 	uses
-		Processes, AppleTalk, ADSP, Serial, Sound, TCPTypes, Initial, NodePrefs, InpOut4;
+		Processes, AppleTalk, ADSP, Serial, Sound, TCPTypes, Initial, NodePrefs2, NodePrefs, Import, InpOut4;
 
 	procedure DoWebTosser;
 
@@ -45,6 +45,12 @@ implementation
 		end;
 	end;
 
+	procedure LogWebTosserError (logStr: Str255);
+	begin
+		LogWebTosser(logStr);
+		WriteNetLog(logStr);
+	end;
+
 	procedure DoWebTosser;
 		label
 			1;
@@ -78,6 +84,9 @@ implementation
 		case webTosserDo of
 			WebTosserConnect: 
 			begin
+				{ Log the start of the poll. }
+				WriteNetLog(Concat('Web Tosser poll started at: ', WhatTime(-1)));
+
 				{ Initialize the web tosser. }
 				webTosserAreasBbsRefNum := -1;
 				webTosserGenericExportRefNum := -1;
@@ -88,7 +97,7 @@ implementation
 				if result = noErr then
 				begin
 					webTosserGenericImportRefNum := -1;
-					LogWebTosser('Generic Import file already exists; aborting Web Tosser poll.');
+					LogWebTosserError('Generic Import file already exists; aborting Web Tosser poll.');
 					webTosserDo := WebTosserDone;
 					Exit(DoWebTosser);
 				end;
@@ -96,7 +105,7 @@ implementation
 				result := Create(Concat(Mailer^^.GenericPath, 'Generic Import'), 0, 'HRMS', 'TEXT');
 				if result <> noErr then
 				begin
-					LogWebTosser(Concat('Error creating Generic Import file: ', StringOf(result : 0), '.'));
+					LogWebTosserError(Concat('Error creating Generic Import file: ', StringOf(result : 0), '.'));
 					webTosserDo := WebTosserDone;
 					Exit(DoWebTosser);
 				end;
@@ -105,7 +114,7 @@ implementation
 				if result <> noErr then
 				begin
 					webTosserGenericImportRefNum := -1;
-					LogWebTosser(Concat('Error opening Generic Import file: ', StringOf(result : 0), '.'));
+					LogWebTosserError(Concat('Error opening Generic Import file: ', StringOf(result : 0), '.'));
 					webTosserDo := WebTosserDone;
 					Exit(DoWebTosser);
 				end;
@@ -115,7 +124,7 @@ implementation
 				if result <> noErr then
 				begin
 					webTosserAreasBbsRefNum := -1;
-					LogWebTosser(Concat('Error opening Areas.BBS file: ', StringOf(result : 0), '.'));
+					LogWebTosserError(Concat('Error opening Areas.BBS file: ', StringOf(result : 0), '.'));
 					webTosserDo := WebTosserDone;
 					Exit(DoWebTosser);
 				end;
@@ -128,12 +137,13 @@ implementation
 				result := CreateTCPStream(@webTosserTCP);
 				if result <> noErr then
 				begin
+					LogWebTosserError(Concat('Error creating TCP stream: ', StringOf(result : 0), '.'));
 					webTosserDo := WebTosserDone;
 					Exit(DoWebTosser);
 				end;
 
 				{ Initiate the connection to the Hermes Web Tosser. }
-				LogWebTosser('Opening connection to Hermes Web Tosser at TODO...');
+				LogWebTosser('Opening connection to Hermes Web Tosser.');
 				InitiateTCPConnection(@webTosserTCP, $4537e4ed, 80, CONNECT_TIMEOUT);
 				webTosserDo := WebTosserConnectWait;
 			end;
@@ -147,7 +157,7 @@ implementation
 				{ Connection open; see if there was an error. }
 				if webTosserTCP.tcpPBPtr^.ioResult <> noErr then
 				begin
-					LogWebTosser(Concat('Connection failed with error ', StringOf(webTosserTCP.tcpPBPtr^.ioResult : 0), '.'));
+					LogWebTosserError(Concat('Connection failed with error ', StringOf(webTosserTCP.tcpPBPtr^.ioResult : 0), '.'));
 					DestroyTCPStream(@webTosserTCP);
 					webTosserDo := WebTosserDone;
 					Exit(DoWebTosser);
@@ -321,7 +331,7 @@ implementation
 								end
 								else
 								begin
-									LogWebTosser(Concat('Hermes Web Tosser failed the request.'));
+									LogWebTosserError(Concat('Hermes Web Tosser server was unable to process the request.'));
 									webTosserDo := WebTosserDisconnect;
 									Exit(DoWebTosser);
 								end;
@@ -381,7 +391,7 @@ implementation
 
 								if result <> noErr then
 								begin
-									LogWebTosser(Concat('Error writing Generic Import file: ', StringOf(result : 0), '.'));
+									LogWebTosserError(Concat('Error writing Generic Import file: ', StringOf(result : 0), '.'));
 									webTosserDo := WebTosserDisconnect;
 								end;
 
@@ -400,6 +410,8 @@ implementation
 					result := GetEOF(webTosserGenericImportRefNum, writeCnt);
 					result := FSClose(webTosserGenericImportRefNum);
 					webTosserGenericImportRefNum := -1;
+
+					WriteNetLog(Concat('Web Tosser received ', StringOf(writeCnt : 0), ' byte Generic Import file.'));
 
 					{ Delete empty Generic Import files; process non-empty Generic Import files. }
 					if writeCnt = 0 then
@@ -426,7 +438,7 @@ implementation
 				else if result <> noErr then
 				begin
 					DisposPtr(receiveBuffer);
-					LogWebTosser(Concat('Error receiving Generic Import file: ', StringOf(result : 0), '.'));
+					LogWebTosserError(Concat('Error receiving Generic Import file: ', StringOf(result : 0), '.'));
 					webTosserDo := WebTosserDisconnect;
 					Exit(DoWebTosser);
 				end;
@@ -455,7 +467,7 @@ implementation
 				end
 				else
 				begin
-					LogWebTosser(Concat('Error reading file in state ', StringOf(webTosserDoNextFile : 0), ': ', StringOf(result : 0), '.'));
+					LogWebTosserError(Concat('Error reading file in state ', StringOf(webTosserDoNextFile : 0), ': ', StringOf(result : 0), '.'));
 					webTosserDo := WebTosserDisconnect;
 					Exit(DoWebTosser);
 				end;
@@ -494,7 +506,7 @@ implementation
 				{ See if the request was sent successfully. }
 				if webTosserTCP.tcpPBPtr^.ioResult <> noErr then
 				begin
-					LogWebTosser(Concat('Send failed with error ', StringOf(webTosserTCP.tcpPBPtr^.ioResult : 0), '.'));
+					LogWebTosserError(Concat('Send failed with error ', StringOf(webTosserTCP.tcpPBPtr^.ioResult : 0), '.'));
 					webTosserDo := WebTosserDisconnect;
 					Exit(DoWebTosser);
 				end;
@@ -547,6 +559,9 @@ implementation
 
 				shouldPollWebTosser := false;
 				arePollingWebTosser := false;
+
+				WriteNetLog(Concat('Web Tosser poll finished at: ', WhatTime(-1)));
+				WriteNetLog(' ');
 			end;
 		end;
 	end;
