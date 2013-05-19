@@ -48,7 +48,7 @@ interface
 	procedure StartTCPListener (tcpPtr: HermesTCPPtr);
 	function TCPBytesToRead (tcpPtr: HermesTCPPtr): integer;
 	procedure AbortTCPConnection (tcpPtr: HermesTCPPtr);
-	procedure CloseTCPConnection (tcpPtr: HermesTCPPtr);
+	procedure CloseTCPConnection (tcpPtr: HermesTCPPtr; timeout: Byte);
 	procedure IPAddrToString (ip: longint; var addrStr: Str255);
 
 
@@ -219,12 +219,11 @@ implementation
 		err := PBControl(ParmBlkPtr(@cb), false);
 	end;
 
-	procedure CloseTCPConnection (tcpPtr: HermesTCPPtr);
+	procedure CloseTCPConnection (tcpPtr: HermesTCPPtr; timeout: Byte);
 		var
 			err: OSErr;
-			cb: TCPControlBlock;
 	begin
-		with cb do
+		with TCPControlBlockPtr(tcpPtr^.tcpPBPtr)^ do
 		begin
 			ioResult := 1;
 			ioCompletion := nil;
@@ -233,12 +232,12 @@ implementation
 			csCode := TCPcsClose;
 			tcpStream := tcpPtr^.tcpStreamPtr;
 
-			close.ulpTimeoutValue := 0;
+			close.ulpTimeoutValue := timeout;
 			close.ulpTimeoutAction := -1;
 			close.validityFlags := $c0;
 			close.userDataPtrX := nil;
 		end;
-		err := PBControl(ParmBlkPtr(@cb), false);
+		err := PBControl(ParmBlkPtr(tcpPtr^.tcpPBPtr), true);
 	end;
 
 	procedure IPAddrToString (ip: longint; var addrStr: Str255);

@@ -53,6 +53,7 @@ implementation
 			CONNECT_TIMEOUT = 30;
 			SEND_TIMEOUT = 30;
 			RECEIVE_TIMEOUT = 30;
+			DISCONNECT_TIMEOUT = 30;
 		{ Buffer sizes. }
 			RECEIVE_BUFFER = 8192;
 		{ Header constants. }
@@ -506,7 +507,7 @@ implementation
 			begin
 				{ Close the connection. }
 				LogWebTosser('Closing connection...');
-				CloseTCPConnection(@webTosserTCP);
+				CloseTCPConnection(@webTosserTCP, DISCONNECT_TIMEOUT);
 				webTosserDo := WebTosserDisconnectWait;
 			end;
 

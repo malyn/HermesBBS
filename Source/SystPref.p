@@ -460,10 +460,10 @@ implementation
 							csCode := TCPcsSend;
 							tcpStream := nodeTCP.tcpStreamPtr;
 
-							send.ulpTimeoutValue := 0;
+							send.ulpTimeoutValue := 30;
 							send.ulpTimeoutAction := -1;
 							send.validityFlags := $c0;
-							send.pushFlag := 0;
+							send.pushFlag := 1;
 							send.urgentFlag := 0;
 							send.wds := nodeTCP.tcpWDSPtr;
 							send.userDataPtr := nil;

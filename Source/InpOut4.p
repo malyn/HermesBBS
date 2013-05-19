@@ -820,8 +820,7 @@ implementation
 						end
 						else if (nodeType = 3) then
 						begin
-							CloseTCPConnection(@nodeTCP);
-							hangingUp := 3;
+							hangingUp := 29;
 						end;
 						if sendLogOff then
 							MultinodeOutput(concat('< ', thisUser.userName, RetInStr(42), ' >'));
@@ -859,6 +858,15 @@ implementation
 					begin
 						TellModem('ATH0');
 						hangingUp := 4;
+					end;
+				end;
+				29: 
+				begin
+					{ Only close the connection if all outstanding sends have completed. }
+					if ((nodeTCP.tcpPBPtr^.ioResult <> 1) and (toBeSent = nil)) then
+					begin
+						CloseTCPConnection(@nodeTCP, 5);
+						hangingUp := 3;
 					end;
 				end;
 				3: 
