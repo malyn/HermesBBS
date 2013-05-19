@@ -1523,7 +1523,7 @@ interface
 		webTosserAreasBbsRefNum, webTosserGenericExportRefNum, webTosserGenericImportRefNum: integer;
 		webTosserSending: Str255;
 		webTosserSendingRefNum: integer;
-		webTosserParseGenericImportState: (wtpgiSkippingHeader, wtpgiSkippingLF1, wtpgiSkippingCR2, wtpgiSkippingLF2, wtpgiReadingFile);
+		webTosserParseGenericImportState: (wtpgiCheckHttpStatusCode, wtpgiSkippingHeader, wtpgiSkippingLF1, wtpgiSkippingCR2, wtpgiSkippingLF2, wtpgiReadingFile);
 
 	procedure InitHermes;
 	function QuickCheckSerial: boolean;

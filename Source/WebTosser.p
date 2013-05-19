@@ -276,7 +276,7 @@ implementation
 				LogWebTosser('Sending request trailer...');
 				webTosserDo := WebTosserSend;
 				webTosserDoNext := WebTosserReceiveGenericImport;
-				webTosserParseGenericImportState := wtpgiSkippingHeader;
+				webTosserParseGenericImportState := wtpgiCheckHttpStatusCode;
 			end;
 
 			WebTosserReceiveGenericImport: 
@@ -312,6 +312,20 @@ implementation
 					{ Process the data according to our parse state. }
 					for giPos := 1 to writeCnt do
 						case webTosserParseGenericImportState of
+							wtpgiCheckHttpStatusCode: 
+							begin
+								if Ptr(Longint(receiveBuffer) + 9)^ = Ord('2') then
+								begin
+									webTosserParseGenericImportState := wtpgiSkippingHeader;
+								end
+								else
+								begin
+									LogWebTosser(Concat('Hermes Web Tosser failed the request.'));
+									webTosserDo := WebTosserDisconnect;
+									Exit(DoWebTosser);
+								end;
+							end;
+
 							wtpgiSkippingHeader: 
 							begin
 1:
@@ -396,6 +410,14 @@ implementation
 					begin
 						{ Check for a Generic Import file now (since we just finished receiving one). }
 						lastGenericCheck := 0;
+					end;
+
+					{ Delete the Generic Export file (if any). }
+					if webTosserGenericExportRefNum <> -1 then
+					begin
+						result := FSClose(webTosserGenericExportRefNum);
+						webTosserGenericExportRefNum := -1;
+						result := FSDelete(Concat(Mailer^^.GenericPath, 'Generic Export'), 0);
 					end;
 
 					webTosserDo := WebTosserDisconnect;
@@ -510,7 +532,7 @@ implementation
 				if webTosserGenericExportRefNum <> -1 then
 				begin
 					result := FSClose(webTosserGenericExportRefNum);
-					webTosserAreasBbsRefNum := -1;
+					webTosserGenericExportRefNum := -1;
 				end;
 
 				{ Delete the (partially-received) Generic Import file if it is still open. }
