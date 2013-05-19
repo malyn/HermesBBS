@@ -1427,7 +1427,7 @@ typedef struct {
 
 #pragma options align=reset
 
-#if !powerc
+#if !powerc && !noHermesProcs
 
 /*-------------------------------------------------------------------------------
 

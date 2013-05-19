@@ -10269,7 +10269,7 @@ resource 'DITL' (1539, "About Box", purgeable) {
 		{150, 65, 178, 387},
 		StaticText {
 			disabled,
-			"© 1989-2008 by Michael Alyn Miller.  All"
+			"© 1989-2009 by Michael Alyn Miller.  All"
 			" rights reserved.\n                Origin"
 			"al version of Hermes by Will Price."
 		},
@@ -33172,10 +33172,10 @@ resource 'vers' (1) {
 	0x3,
 	0x5B,
 	beta,
-	0x1,
+	0x2,
 	verUS,
-	"3.5.11b1",
-	"© 1989-2008 by Michael Alyn Miller\nAll r"
+	"3.5.11b2",
+	"© 1989-2009 by Michael Alyn Miller\nAll r"
 	"ights reserved."
 };
 
@@ -33183,10 +33183,10 @@ resource 'vers' (2) {
 	0x3,
 	0x5B,
 	beta,
-	0x1,
+	0x2,
 	verUS,
-	"3.5.11b1",
+	"3.5.11b2",
 	"Hermes II Bulletin Board System Version "
-	"3.5.11b1"
+	"3.5.11b2"
 };
 

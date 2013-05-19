@@ -935,7 +935,7 @@ implementation
 					else if (CurPrompt = '//VER') or (CurPrompt = '//VERSION') then
 					begin
 						OutLineC(concat('Hermes II Bulletin Board System Version ', HERMES_VERSION), true, 2);
-						OutLineC('Copyright 1989-2008 by Michael Alyn Miller.  All rights reserved.', true, 2);
+						OutLineC('Copyright 1989-2009 by Michael Alyn Miller.  All rights reserved.', true, 2);
 						OutLineC('Original version of Hermes by Will Price.', true, 2);
 						bCR;
 						OutLineC('http://www.HermesBBS.com/', true, 1);
