@@ -1052,7 +1052,8 @@ implementation
 			NumToString(thisUser.UserNum, tempString2);
 			OutLine(concat(RetInStr(46), thisUser.UserName, ' #', tempString2), true, 0);
 			OutLine(concat(RetInStr(288), SecLevels^^[thisUser.SL].class), true, 0);{Classification : }
-			OutLine(concat(RetInStr(47), thisUser.Phone), true, 0);
+			if newHand^^.VoicePN then
+				OutLine(concat(RetInStr(47), thisUser.Phone), true, 0);
 			FindMyEmail(thisUser.UserNum);
 			tempInt := GetHandleSize(handle(myEmailList)) div 2;
 			if tempInt > 0 then

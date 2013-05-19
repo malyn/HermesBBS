@@ -517,6 +517,26 @@ implementation
 						end;
 						3: 
 						begin
+							if (newhand^^.VoicePN) and (thisUser.phone = '•') then
+							begin
+								quiz := GetVoice;
+								boardsection := NewUser;
+								if crossint6 = 0 then
+								begin
+									OutLine(RetInStr(745), true, 2);{The SysOp is requesting the following information:}
+									bCR;
+									crossint6 := 1;
+								end;
+							end
+							else
+							begin
+								crossint9 := crossint9 + 1;
+								boardsection := Logon;
+								LogonStage := Hello;
+							end;
+						end;
+						4: 
+						begin
 							if (newhand^^.DataPN) and (thisUser.dataphone = '•') then
 							begin
 								quiz := GetData;
@@ -535,7 +555,7 @@ implementation
 								LogonStage := Hello;
 							end;
 						end;
-						4: 
+						5: 
 						begin
 							if (newhand^^.Computer) and (thisUser.ComputerType = '•') then
 							begin
@@ -555,7 +575,7 @@ implementation
 								LogonStage := Hello;
 							end;
 						end;
-						5: 
+						6: 
 						begin
 							if (newhand^^.Company) and (thisUser.company = '•') then
 							begin
@@ -575,7 +595,7 @@ implementation
 								LogonStage := Hello;
 							end;
 						end;
-						6: 
+						7: 
 						begin
 							if (newhand^^.Street) and (thisUser.street = '•') then
 							begin
@@ -595,7 +615,7 @@ implementation
 								LogonStage := Hello;
 							end;
 						end;
-						7: 
+						8: 
 						begin
 							if (newhand^^.City) and (thisUser.City = '•') then
 							begin
@@ -615,7 +635,7 @@ implementation
 								LogonStage := Hello;
 							end;
 						end;
-						8: 
+						9: 
 						begin
 							if (newhand^^.City) and (thisUser.state = '•') then
 							begin
@@ -635,7 +655,7 @@ implementation
 								LogonStage := Hello;
 							end;
 						end;
-						9: 
+						10: 
 						begin
 							if (newhand^^.City) and (thisUser.zip = '•') then
 							begin
@@ -655,7 +675,7 @@ implementation
 								LogonStage := Hello;
 							end;
 						end;
-						10: 
+						11: 
 						begin
 							if (newhand^^.Country) and (thisUser.country = '•') then
 							begin
@@ -675,7 +695,7 @@ implementation
 								LogonStage := Hello;
 							end;
 						end;
-						11: 
+						12: 
 						begin
 							if (newhand^^.SysOp[1]) and (thisUser.miscField1 = '•') then
 							begin
@@ -695,7 +715,7 @@ implementation
 								LogonStage := Hello;
 							end;
 						end;
-						12: 
+						13: 
 						begin
 							if (newhand^^.SysOp[2]) and (thisUser.miscField2 = '•') then
 							begin
@@ -715,7 +735,7 @@ implementation
 								LogonStage := Hello;
 							end;
 						end;
-						13: 
+						14: 
 						begin
 							if (newhand^^.SysOp[3]) and (thisUser.miscField3 = '•') then
 							begin
@@ -1285,8 +1305,13 @@ implementation
 								goHome;
 						4: 
 						begin
-							Quiz := GetVoice;
-							boardsection := NewUser;
+							if newHand^^.VoicePN then
+							begin
+								Quiz := GetVoice;
+								boardsection := NewUser;
+							end
+							else
+								goHome;
 						end;
 						5: 
 							if newHand^^.DataPN then

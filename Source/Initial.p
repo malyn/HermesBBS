@@ -254,6 +254,8 @@ interface
 				NoVFeedback: boolean;
 				QScanBack: integer;
 				NoAutoCapital: boolean;
+{ Added in 3.5.11b2; reserved was 1..997 (and still is because of 68k alignment }
+				VoicePN: Boolean;
 				Reserved: array[1..997] of char;
 			end;
 

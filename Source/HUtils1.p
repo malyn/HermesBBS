@@ -434,10 +434,13 @@ implementation
 					BufferIt(NextNum, false, 0);
 					BufferIt('] Password : ', false, 1);
 					BufferIt(theUser.Password, false, 0);
-					BufferIt('[', true, 1);
-					BufferIt(NextNum, false, 0);
-					BufferIt('] Voice PH : ', false, 1);
-					BufferIt(theUser.Phone, false, 0);
+					if (newHand^^.VoicePN) then
+					begin
+						BufferIt('[', true, 1);
+						BufferIt(NextNum, false, 0);
+						BufferIt('] Voice PH : ', false, 1);
+						BufferIt(theUser.Phone, false, 0);
+					end;
 					if (newHand^^.DataPN) then
 					begin
 						BufferIt('[', true, 1);
@@ -635,11 +638,14 @@ implementation
 				WhatKey := '3';
 				Exit(WhatKey);
 			end;
-			tempint := tempint + 1;
-			if DoACheck(incomingChar, tempint) then
+			if (newHand^^.VoicePN) then
 			begin
-				WhatKey := '4';
-				Exit(WhatKey);
+				tempint := tempint + 1;
+				if DoACheck(incomingChar, tempint) then
+				begin
+					WhatKey := '4';
+					Exit(WhatKey);
+				end;
 			end;
 			if (newHand^^.DataPN) then
 			begin

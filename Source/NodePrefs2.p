@@ -1035,6 +1035,7 @@ implementation
 			thisUser.alertOn := false;
 			thisUser.UserName := '';
 			thisUser.RealName := '•';
+			thisUser.Phone := '•';
 			thisUser.DataPhone := '•';
 			thisUser.Company := '•';
 			thisUser.Street := '•';

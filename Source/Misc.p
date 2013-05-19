@@ -735,6 +735,7 @@ implementation
 			SetCheckBox(NewDilg, 16, NewHand^^.Street);
 			SetCheckBox(NewDilg, 23, NewHand^^.Computer);
 			SetCheckBox(NewDilg, 28, NewHand^^.NoAutoCapital);
+			SetCheckBox(NewDilg, 29, NewHand^^.VoicePN);
 			for i := 1 to 3 do
 			begin
 				SetCheckBox(NewDilg, 16 + i, NewHand^^.SysOp[i]);
@@ -1016,6 +1017,14 @@ implementation
 					else
 						NewHand^^.NoAutoCapital := true;
 					SetCheckBox(NewDilg, 28, NewHand^^.NoAutoCapital);
+				end;
+				29: 
+				begin
+					if newHand^^.VoicePN then
+						newHand^^.VoicePN := false
+					else
+						newHand^^.VoicePN := true;
+					SetCheckBox(NewDilg, 29, newHand^^.VoicePN);
 				end;
 			end;
 		end;

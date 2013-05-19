@@ -140,7 +140,8 @@ implementation
 				bufferIt(concat(NextNum, RetInStr(654), thisUser.Alias), true, 0);{] Handle/Alias     : }
 			if newhand^^.realname then
 				bufferIt(concat(NextNum, RetInStr(655), thisUser.RealName), true, 0);{] Realname         : }
-			bufferIt(concat(NextNum, RetInStr(656), thisUser.Phone), true, 0);{] Phone Number     : }
+			if newhand^^.VoicePN then
+				bufferIt(concat(NextNum, RetInStr(656), thisUser.Phone), true, 0);{] Phone Number     : }
 			if newhand^^.DataPN then
 				bufferIt(concat(NextNum, RetInStr(657), thisUser.DataPhone), true, 0);{] Data Phone Number: }
 			if newHand^^.gender then
@@ -249,11 +250,14 @@ implementation
 					Exit(WhatKey);
 				end;
 			end;
-			tempint := tempint + 1;
-			if DoACheck(incomingChar, tempint) then
+			if (newHand^^.VoicePN) then
 			begin
-				WhatKey := 'C';
-				Exit(WhatKey);
+				tempint := tempint + 1;
+				if DoACheck(incomingChar, tempint) then
+				begin
+					WhatKey := 'C';
+					Exit(WhatKey);
+				end;
 			end;
 			if (newHand^^.DataPN) then
 			begin

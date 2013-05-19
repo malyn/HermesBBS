@@ -274,6 +274,7 @@ implementation
 			BirthDay := true;
 			City := true;
 			Country := false;
+			VoicePN := true;
 			DataPN := false;
 			Company := false;
 			Street := true;
