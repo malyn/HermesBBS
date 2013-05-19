@@ -29695,8 +29695,8 @@ resource 'STR#' (17, "Miscellaneous Strings", purgeable) {
 		"Please call back later when you are ther"
 		"e.",
 		/* [7] */
-		"[Enter Q to Quit or any othe key to cont"
-		"inue]",
+		"[Enter Q to Quit or any other key to con"
+		"tinue]",
 		/* [8] */
 		"NETWORK CRASHMAIL CALL DETECTED - LAUNCH"
 		"ED MAILER",
