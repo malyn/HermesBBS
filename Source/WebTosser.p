@@ -434,6 +434,7 @@ implementation
 			WebTosserSendFile: 
 			begin
 				{ Read the next 250 bytes of the file. }
+				writeCnt := 250;
 				result := FSRead(webTosserSendingRefNum, writeCnt, @webTosserSending);
 				if result = noErr then
 				begin
