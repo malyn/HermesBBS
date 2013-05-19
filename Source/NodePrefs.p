@@ -47,6 +47,7 @@ interface
 	procedure InitiateTCPConnection (tcpPtr: HermesTCPPtr; remoteAddress: ipAddr; remotePort: ipPort; timeout: Byte);
 	procedure StartTCPListener (tcpPtr: HermesTCPPtr);
 	function TCPBytesToRead (tcpPtr: HermesTCPPtr): integer;
+	function TCPReadWillBlock (tcpPtr: HermesTCPPtr): boolean;
 	procedure AbortTCPConnection (tcpPtr: HermesTCPPtr);
 	procedure CloseTCPConnection (tcpPtr: HermesTCPPtr; timeout: Byte);
 	procedure IPAddrToString (ip: longint; var addrStr: Str255);
@@ -198,6 +199,39 @@ implementation
 			TCPBytesToRead := cb.status.amtUnreadData
 		else
 			TCPBytesToRead := 0;
+	end;
+
+	function TCPReadWillBlock (tcpPtr: HermesTCPPtr): boolean;
+		var
+			err: OSErr;
+			cb: TCPControlBlock;
+	begin
+		with cb do
+		begin
+			ioResult := 1;
+			ioCompletion := nil;
+
+			ioCRefNum := ippDrvrRefNum;
+			csCode := TCPcsStatus;
+			tcpStream := tcpPtr^.tcpStreamPtr;
+
+			status.userDataPtr := nil;
+		end;
+		err := PBControl(ParmBlkPtr(@cb), false);
+
+		if (err = noErr) then
+		begin
+			{ TCP reads will not block if we have data available or if the connection state }
+			{ is not Established (because presumably read will return an error). }
+			if cb.status.amtUnreadData > 0 then
+				TCPReadWillBlock := false
+			else if cb.status.connectionState <> 8 then
+				TCPReadWillBlock := false
+			else
+				TCPReadWillBlock := true;
+		end
+		else
+			TCPReadWillBlock := false;
 	end;
 
 	procedure AbortTCPConnection (tcpPtr: HermesTCPPtr);

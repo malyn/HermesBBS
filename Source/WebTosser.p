@@ -292,6 +292,10 @@ implementation
 
 			WebTosserReceiveGenericImport: 
 			begin
+				{ Keep looping if the TCP read would block. }
+				if TCPReadWillBlock(@webTosserTCP.tcpPBPtr) then
+					Exit(DoWebTosser);
+
 				{ Receive the next RECEIVE_BUFFER bytes of the file. }
 				receiveBuffer := NewPtr(RECEIVE_BUFFER);
 				with webTosserTCP.tcpPBPtr^ do
