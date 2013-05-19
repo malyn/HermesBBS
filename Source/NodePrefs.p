@@ -207,7 +207,7 @@ implementation
 			close.validityFlags := $c0;
 			close.userDataPtrX := nil;
 		end;
-		err := PBControl(ParmBlkPtr(@cb), true);
+		err := PBControl(ParmBlkPtr(@cb), false);
 	end;
 
 	procedure IPAddrToString (ip: longint; var addrStr: Str255);
