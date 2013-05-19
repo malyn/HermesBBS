@@ -636,10 +636,50 @@ implementation
 		ForumDlg := nil;
 	end;
 
+	procedure WriteAreasBBS;
+		var
+			result: OSErr;
+			refNum: integer;
+			count: longint;
+			areaNum, areaLine: Str255;
+			forumNum, confNum: integer;
+	begin
+	{ Delete any pre-existing Areas.BBS file. }
+		result := FSDelete(concat(sharedPath, 'Misc:Areas.BBS'), 0);
+
+	{ Write out a new Areas.BBS file. }
+		result := Create(concat(sharedPath, 'Misc:Areas.BBS'), 0, 'HRMS', 'DATA');
+		if result = noErr then
+		begin
+			result := FSOpen(concat(sharedPath, 'Misc:Areas.BBS'), fsRdWrPerm, refNum);
+			if result = noErr then
+			begin
+			{ Write out the origin line. }
+				areaLine := concat(mailer^^.hwtOriginLine, Char(10));
+				count := longint(areaLine[0]);
+				result := FSWrite(refNum, count, @areaLine[1]);
+
+			{ Write out all of the area lines. }
+				for forumNum := 1 to ForumIdx^^.numForums do
+					for confNum := 1 to MForum^^[forumNum].numConferences do
+						if MConference[forumNum]^^[confNum].ConfType = 1 then
+						begin
+							NumToString((forumNum * 100) + confNum, areaNum);
+							areaLine := concat(areaNum, ' ', MConference[forumNum]^^[confNum].EchoName, Char(10));
+							count := longint(areaLine[0]);
+							result := FSWrite(refNum, count, @areaLine[1]);
+						end;
+
+			{ Close the new Areas.BBS file. }
+				result := FSClose(refNum);
+			end;
+		end;
+	end;
+
 	function EditMessageConference (Which: integer; New: boolean): boolean;
 		var
 			ConferenceDlg, ModeratorDlg: DialogPtr;
-			itemHit, DType, adder, i, DirNum: integer;
+			itemHit, DType, adder, i, j, DirNum: integer;
 			DItem: handle;
 			tempRect: rect;
 			s1: str255;
@@ -745,15 +785,18 @@ implementation
 				SetCheckBox(ConferenceDlg, 46, True)
 			else
 				SetCheckBox(ConferenceDlg, 34, True);
-{if (ConfType = 1) or (ConfType = 2) then}
-{begin}
-{if EchoName <> char(0) then}
-{SetTextBox(ConferenceDlg, 48, concat('Echo Name: ', EchoName))}
-{else}
-{SetTextBox(ConferenceDlg, 48, concat('Echo Name: Unknown'));}
-{end}
-{else}
-{SetTextBox(ConferenceDlg, 48, ' ');}
+			if (MConference[curForum]^^[Which].ConfType = 1) or (MConference[curForum]^^[Which].ConfType = 2) then
+			begin
+				if MConference[curForum]^^[Which].EchoName <> char(0) then
+					SetTextBox(ConferenceDlg, 49, MConference[curForum]^^[Which].EchoName)
+				else
+					SetTextBox(ConferenceDlg, 49, '');
+			end
+			else
+			begin
+				HideDItem(ConferenceDlg, 48);
+				HideDItem(ConferenceDlg, 49);
+			end;
 		end
 		else
 		begin
@@ -762,6 +805,8 @@ implementation
 			GetDItem(ConferenceDlg, 46, DType, DItem, tempRect);
 			HiLiteControl(ControlHandle(DItem), 255);
 			SetCheckBox(ConferenceDlg, 34, True);
+			HideDItem(ConferenceDlg, 48);
+			HideDItem(ConferenceDlg, 49);
 		end;
 		if FindUser(stringOf(MConference[curForum]^^[Which].Moderators[1] : 0), tUser) then
 			SetTextBox(ConferenceDlg, 40, stringOf(tUser.username, ' #', tUser.usernum : 0));
@@ -846,11 +891,26 @@ implementation
 					SetCheckBox(ConferenceDlg, 46, False);
 					case itemHit of
 						34: 
+						begin
 							MConference[curForum]^^[Which].ConfType := 0;
+							MConference[curForum]^^[Which].EchoName := char(0);
+							HideDItem(ConferenceDlg, 48);
+							HideDItem(ConferenceDlg, 49);
+						end;
 						45: 
+						begin
 							MConference[curForum]^^[Which].ConfType := 1;
+							MConference[curForum]^^[Which].EchoName := char(0);
+							ShowDItem(ConferenceDlg, 48);
+							ShowDItem(ConferenceDlg, 49);
+						end;
 						46: 
+						begin
 							MConference[curForum]^^[Which].ConfType := 2;
+							MConference[curForum]^^[Which].EchoName := char(0);
+							ShowDItem(ConferenceDlg, 48);
+							ShowDItem(ConferenceDlg, 49);
+						end;
 					end;
 					SetCheckBox(ConferenceDlg, itemHit, True);
 				end;
@@ -971,7 +1031,7 @@ implementation
 					SetCheckBox(ConferenceDlg, 44, MConference[curForum]^^[Which].ShowCity);
 				end;
 			end;
-		until (itemHit = 1); {or (itemHit = 49)}
+		until (itemHit = 1);
 		if itemHit = 1 then
 		begin
 			s1 := GetTextBox(ConferenceDlg, 10);
@@ -1003,6 +1063,36 @@ implementation
 			else
 				s1[1] := char(0);
 			MConference[curForum]^^[Which].AccessLetter := s1[1];
+			s1 := GetTextBox(ConferenceDlg, 49);
+			if MConference[curForum]^^[Which].ConfType = 1 then
+			begin
+				if ((length(s1) < 1) or (length(s1) > 64)) or (s1[1] <= char(32)) then
+				begin
+					ProblemRep('Your echo name has to be 1 to 64 characaters long. The echo name will not be changed.');
+					s1 := MConference[curForum]^^[Which].EchoName;
+					if length(s1) < 1 then
+						MConference[curForum]^^[Which].ConfType := 0;
+				end
+				else
+				begin
+					for i := 1 to ForumIdx^^.numForums do
+						for j := 1 to MForum^^[i].numConferences do
+							if (s1 = MConference[i]^^[j].EchoName) and (i <> curForum) and (j <> Which) then
+							begin
+								ProblemRep('Duplicate echo name.  The echo name will not be changed.');
+								s1 := MConference[curForum]^^[Which].EchoName;
+								if length(s1) < 1 then
+									MConference[curForum]^^[Which].ConfType := 0;
+								leave;
+							end;
+				end;
+				MConference[curForum]^^[Which].EchoName := s1;
+			end
+			else
+			begin
+				MConference[curForum]^^[Which].EchoName := char(0);
+			end;
+			WriteAreasBBS;
 			EditMessageConference := True;
 		end
 		else

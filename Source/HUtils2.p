@@ -6,7 +6,7 @@ interface
 		AppleTalk, ADSP, Serial, Sound, TCPTypes, Initial, LoadAndSave, NodePrefs2, NodePrefs, SystemPrefs2, SystemPrefs, Message_Editor2, User, UserManager, Misc, Misc2, Terminal, inpOut4, inpOut3, inpOut2, Quoter, InpOut, ChatroomUtils, Chatroom, FileTrans2, FileTrans, HUtilsOne;
 
 
-	procedure DoMenuCommand (menuResult: LONGINT);
+	procedure DoMenuCommand (menuResult: LONGINT; modifiers: integer);
 	procedure UnCheckTerm;
 	procedure DoMultiMail;
 	procedure DoUpMess;
@@ -130,9 +130,9 @@ implementation
 					EnableItem(getMHandle(mSysop), 2);
 				end;
 				if curglobs^.nodeType = 1 then
-					EnableItem(getMHandle(mSysop), 14)
+					EnableItem(getMHandle(mSysop), 15)
 				else
-					DisableItem(getMHandle(mSysop), 14);
+					DisableItem(getMHandle(mSysop), 15);
 				if curglobs^.capturing then
 					CheckItem(GetMHandle(mFile), 8, true)
 				else
@@ -1078,6 +1078,26 @@ implementation
 									SelectWindow(ErrorDlg);
 							14: 
 							begin
+								if (Mailer^^.MailerAware) and (Mailer^^.SubLaunchMailer = 3) and (not arePollingWebTosser) then
+								begin
+									shouldPollWebTosser := true;
+									if (BAnd(modifiers, optionKey) <> 0) then
+									begin
+										debugWebTosser := true;
+										if BAnd(modifiers, shiftKey) <> 0 then
+											debugWebTosserToFile := true
+										else
+											debugWebTosserToFile := false;
+									end
+									else
+									begin
+										debugWebTosser := false;
+										debugWebTosserToFile := false;
+									end;
+								end;
+							end;
+							15: 
+							begin
 								if (ismyBBSwindow(frontWindow) > 0) and ((BoardMode = Waiting) or (BoardMode = Failed)) and (nodeType >= 0) then
 								begin
 									BoardMode := Terminal;
@@ -1125,12 +1145,12 @@ implementation
 							end;
 							13: 
 								OpenSystemConfig(1);
-							16..115:  {Nodes 1 through 100}
+							17..118:  {Nodes 1 through 100 + separator + status window}
 							begin
-								if menuItem = (InitSystHand^^.numNodes + 17) then
+								if menuItem = (InitSystHand^^.numNodes + 18) then
 									OpenStatWindow
 								else
-									SwitchNode(menuItem - 15);
+									SwitchNode(menuItem - 16);
 							end;
 
 							otherwise

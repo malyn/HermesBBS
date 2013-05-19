@@ -539,7 +539,7 @@ implementation
 						if (BoardMode = Terminal) and (XferAutoStart = 2) then
 						begin
 							if XFerAutoStart = 2 then
-								DoMenuCommand(longint($03F10007));
+								DoMenuCommand(longint($03F10007), 0);
 							XferAutoStart := 0;
 						end;
 						i := length(typeBuffer);

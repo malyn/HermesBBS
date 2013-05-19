@@ -1,7 +1,7 @@
 program Hermes;
 
 	uses
-		AppleTalk, ADSP, Serial, Sound, Notification, AppleTalk, PPCToolbox, Processes, EPPC, AppleEvents, TCPTypes, Initial, LoadAndSave, NodePrefs2, NodePrefs, SystemPrefs2, SystemPrefs, Message_Editor, Message_Editor2, Import, User, UserManager, Misc, Misc2, Terminal, inpOut4, inpOut3, inpOut2, Quoter, inpOut, MessNTextOutput, ChatRoomUtils, Chatroom, FileTrans3, FileTrans2, FileTrans, HUtilsOne, HUtils2, HUtils3, HUtils5, HUtils7;
+		AppleTalk, ADSP, Serial, Sound, Notification, AppleTalk, PPCToolbox, Processes, EPPC, AppleEvents, TCPTypes, Initial, LoadAndSave, NodePrefs2, NodePrefs, SystemPrefs2, SystemPrefs, Message_Editor, Message_Editor2, Import, User, UserManager, Misc, Misc2, Terminal, inpOut4, inpOut3, inpOut2, Quoter, inpOut, MessNTextOutput, ChatRoomUtils, Chatroom, FileTrans3, FileTrans2, FileTrans, HUtilsOne, HUtils2, HUtils3, HUtils5, HUtils7, WebTosser;
 
 {$S Initial_1}
 	procedure Initial_1;
@@ -581,13 +581,13 @@ program Hermes;
 								SetItemStyle(GetMHandle(mUser), 1, [bold])
 							else
 								SetItemStyle(GetMHandle(mUser), 1, []);
-							for i := 15 to countMItems(getMHandle(mSysOp)) do
-								DelMenuItem(getMHandle(mSysOp), 16);
+							for i := 16 to countMItems(getMHandle(mSysOp)) do
+								DelMenuItem(getMHandle(mSysOp), 17);
 							tvMenu := GetMHandle(mSysOp);
 							if (theNodes[visibleNode]^.nodeType <= 0) then
-								DisableItem(getMHandle(mSysop), 14)
+								DisableItem(getMHandle(mSysop), 15)
 							else
-								EnableItem(getMHandle(mSysop), 14);
+								EnableItem(getMHandle(mSysop), 15);
 							for i := 1 to InitSystHand^^.numNodes do
 							begin
 								if (theNodes[i]^.boardMode = User) and (thenodes[i]^.thisUser.userNum > 0) then
@@ -601,7 +601,7 @@ program Hermes;
 								AppendMenu(tvMenu, ' ');
 								SetItem(tvMenu, countMItems(tvMenu), tempstring);
 							end;
-							CheckItem(tvMenu, visibleNode + 15, true);
+							CheckItem(tvMenu, visibleNode + 16, true);
 							AppendMenu(tvMenu, '(-');
 							AppendMenu(tvMenu, 'Status Window/\');
 							if BAnd(event.modifiers, optionkey) <> 0 then
@@ -609,7 +609,7 @@ program Hermes;
 								InitSystHand^^.WUsers.top := 41;
 								InitSystHand^^.WUsers.left := 365;
 							end;
-							DoMenuCommand(MenuSelect(event.where));
+							DoMenuCommand(MenuSelect(event.where), event.modifiers);
 						end;
 						inSysWindow: 
 							SystemClick(event, window);
@@ -1079,15 +1079,25 @@ program Hermes;
 			if mailer^^.MailerAware then
 			begin
 				templong := tickcount;
-				if (lastGenericCheck + 1200 < tempLong) and (not isGeneric) then {was 3600}
+
+			{ Check for a new Generic Import file every 20 seconds as long as we are not already processing a }
+			{ Generic Import file or polling the web tosser.  Initialize the ImportCount if we find a Generic Import file. }
+			{ isGeneric is set to true by doCheckForGeneric.  The next run through this loop will move to the }
+			{ second phase of the process which is where the import itself actually happens. }
+				if (lastGenericCheck + 1200 < tempLong) and (not isGeneric) and (not arePollingWebTosser) then {was 3600}
 				begin
 					doCheckForGeneric;	(* Check for a generic file *)
 					if isGeneric then (* Generic File Was There *)
 						ImportCount := 1;
 				end
+			{ Is there a new Generic Import file?  If so, import the file. }
 				else if isGeneric then
 				begin
+				{ Increment ImportCount. We only import a message every ImportLoopTime times through this }
+				{ loop. }
 					ImportCount := ImportCount + 1;
+
+				{ Check every 10 second to see if a user is on and adjust our ImportLoopTime appropriately. }
 					if lastGenericCheck + 600 < templong then
 					begin
 						lastGenericCheck := tickCount;
@@ -1107,8 +1117,12 @@ program Hermes;
 						else if not anyoneOn then
 							ImportLoopTime := 0;
 					end;
+
+				{ Import a message if we have gone through this loop ImportLoopTime times. }
 					if ImportCount >= ImportLoopTime then
 					begin
+					{ Find a node that is *not* interacting with the message system and use that node to import }
+					{ one message from the Generic Import file. }
 						for i := 1 to InitSystHand^^.numNodes do (* Find an available node *)
 						begin
 							curGlobs := theNodes[i];
@@ -1117,10 +1131,14 @@ program Hermes;
 							begin
 								if (curWriting = nil) and (BoardSection <> post) and (BoardSection <> ScanNew) and (BoardSection <> QScan) and (UseNode) then
 								begin
+								{ Run the import loop until a message has been imported. }
 									MailerDo := MailerOne;
 									SavedImport := false;
 									while not SavedImport do
 										doMailerImport;	(* Import A Message *)
+
+								{ Reset our ImportCount (we'll now have to wait ImportLoopTime times before we can import }
+								{ another message) and leave the find-available-node loop. }
 									ImportCount := 0;
 									leave;
 								end;
@@ -1128,6 +1146,21 @@ program Hermes;
 						end;
 					end;
 				end
+			{ No new Generic Import, and we're not importing mail; do we need to run the web tosser loop? }
+				else if shouldPollWebTosser or arePollingWebTosser then
+				begin
+				{ Start up the web tosser loop if we have not done so already. }
+					if shouldPollWebTosser and (not arePollingWebTosser) then
+					begin
+						arePollingWebTosser := true;
+						webTosserDo := WebTosserConnect;
+					end;
+
+				{ Run the web tosser loop. }
+					DoWebTosser;
+				end
+			{ No new Generic Import, and we're not importing or polling for mail, so now we can see if it is time }
+			{ to shut down the BBS for a mail event. }
 				else
 				begin
 					GetDateTime(tempLong);
@@ -1666,7 +1699,7 @@ begin
 		cursorRgn := NewRgn;
 		result := CallUtility(BUILDMENU, pointer(@theNodes[visibleNode]^.myProcMenu), longint($03F10001));
 		if theNodes[visibleNode]^.nodeType = -1 then
-			DisableItem(getMHandle(mSysop), 14);
+			DisableItem(getMHandle(mSysop), 15);
 		DrawMenuBar;
 		CloseAboutBox;
 		writeDirectToLog := true;
@@ -1679,6 +1712,20 @@ begin
 			GBytes := 0;
 			lastGenericCheck := 0;
 			isGeneric := false;
+			shouldPollWebTosser := false;
+			arePollingWebTosser := false;
+			debugWebTosser := false;
+			debugWebTosserToFile := false;
+			webTosserTCP.tcpPBPtr := nil;
+			webTosserTCP.tcpBuffer := nil;
+			webTosserTCP.tcpStreamPtr := nil;
+			webTosserTCP.tcpWDSPtr := nil;
+			webTosserMimeBoundary := '';
+			webTosserAreasBbsRefNum := -1;
+			webTosserGenericExportRefNum := -1;
+			webTosserGenericImportRefNum := -1;
+			webTosserSending := '';
+			webTosserSendingRefNum := -1;
 			doDetermineZMH;
 		end;
 		for i := 1 to InitSystHand^^.numNodes do
@@ -1700,6 +1747,12 @@ begin
 		end;
 
 		EventLoop;
+
+	{ Cancel the current web tosser connection (if any). }
+		if arePollingWebTosser and (webTosserTCP.tcpPBPtr <> nil) then
+		begin
+			DestroyTCPStream(@webTosserTCP);
+		end;
 
 		if myExternals <> nil then
 		begin

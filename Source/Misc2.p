@@ -627,14 +627,22 @@ implementation
 		if (MailDilg <> nil) then
 		begin
 			Mailer^^.FidoAddress := GetTextBox(MailDilg, 23);
+			Mailer^^.hwtNodeNumber := GetTextBox(MailDilg, 27);
+			Mailer^^.hwtPassword := GetTextBox(MailDilg, 32);
+			Mailer^^.hwtOriginLine := GetTextBox(MailDilg, 34);
 			for i := 1 to InitSystHand^^.NumNodes do
 				theNodes[i]^.doCrashMail := false;
 			theNodes[Mailer^^.MailerNode]^.doCrashMail := Mailer^^.AllowCrashMail;
 			if not Mailer^^.MailerAware then
-				DisableItem(getMHandle(mSysop), 11)
+			begin
+				DisableItem(getMHandle(mSysop), 11);
+				DisableItem(getMHandle(mSysop), 14);
+			end
 			else
 			begin
 				EnableItem(getMHandle(mSysop), 11);
+				if Mailer^^.SubLaunchMailer = 3 then
+					EnableItem(getMHandle(mSysop), 14);
 				doDetermineZMH;
 			end;
 			DoMailerRec(true);
@@ -675,7 +683,7 @@ implementation
 			FrameIt(MailDilg, 14);
 			FrameIt(MailDilg, 30);
 			FrameIt(MailDilg, 24);
-			FrameIt(MailDilg, 27);
+			FrameIt(MailDilg, 36);
 			DrawDialog(MailDilg);
 			SetPort(SavePort);
 		end;
@@ -833,6 +841,11 @@ implementation
 					HiLiteControl(controlHandle(dItem), 0)
 				else
 					HiLiteControl(controlHandle(dItem), 255);
+				GetDItem(MailDilg, 14, dType, dItem, tempRect);
+				if tcpSupported then
+					HiLiteControl(controlHandle(dItem), 0)
+				else
+					HiLiteControl(controlHandle(dItem), 255);
 				GetDItem(MailDilg, 18, dType, dItem, tempRect);
 				HiLiteControl(controlHandle(dItem), 0);
 				GetDItem(MailDilg, 19, dType, dItem, tempRect);
@@ -848,6 +861,8 @@ implementation
 				HiLiteControl(controlHandle(dItem), 255);
 				GetDItem(MailDilg, 12, dType, dItem, tempRect);
 				HiLiteControl(controlHandle(dItem), 255);
+				GetDItem(MailDilg, 14, dType, dItem, tempRect);
+				HiLiteControl(controlHandle(dItem), 255);
 				GetDItem(MailDilg, 18, dType, dItem, tempRect);
 				HiLiteControl(controlHandle(dItem), 255);
 				GetDItem(MailDilg, 19, dType, dItem, tempRect);
@@ -861,6 +876,8 @@ implementation
 				SetCheckBox(MailDilg, 11, True)
 			else if Mailer^^.SubLaunchMailer = 2 then
 				SetCheckBox(MailDilg, 12, True)
+			else if Mailer^^.SubLaunchMailer = 3 then
+				SetCheckBox(MailDilg, 14, True)
 			else
 			begin
 				Mailer^^.SubLaunchMailer := 0;
@@ -877,11 +894,14 @@ implementation
 			end;
 			SetTextBox(MailDilg, 23, Mailer^^.FidoAddress);
 			SetCheckBox(MailDilg, 26, Mailer^^.UseEMSI);
+			SetTextBox(MailDilg, 27, Mailer^^.hwtNodeNumber);
+			SetTextBox(MailDilg, 32, Mailer^^.hwtPassword);
+			SetTextBox(MailDilg, 34, Mailer^^.hwtOriginLine);
 
 			FrameIt(MailDilg, 14);
 			FrameIt(MailDilg, 30);
 			FrameIt(MailDilg, 24);
-			FrameIt(MailDilg, 27);
+			FrameIt(MailDilg, 36);
 
 			GetDItem(MailDilg, 16, dType, dItem, tempRect);
 			if newHand^^.Handle and newHand^^.realName and Mailer^^.MailerAware then
@@ -1054,6 +1074,8 @@ implementation
 							HiLiteControl(controlHandle(dItem), 255);
 							GetDItem(MailDilg, 12, dType, dItem, tempRect);
 							HiLiteControl(controlHandle(dItem), 255);
+							GetDItem(MailDilg, 14, dType, dItem, tempRect);
+							HiLiteControl(controlHandle(dItem), 255);
 							GetDItem(MailDilg, 18, dType, dItem, tempRect);
 							HiLiteControl(controlHandle(dItem), 255);
 							GetDItem(MailDilg, 19, dType, dItem, tempRect);
@@ -1070,6 +1092,8 @@ implementation
 							GetDItem(MailDilg, 11, dType, dItem, tempRect);
 							HiLiteControl(controlHandle(dItem), 0);
 							GetDItem(MailDilg, 12, dType, dItem, tempRect);
+							HiLiteControl(controlHandle(dItem), 0);
+							GetDItem(MailDilg, 14, dType, dItem, tempRect);
 							HiLiteControl(controlHandle(dItem), 0);
 							GetDItem(MailDilg, 18, dType, dItem, tempRect);
 							HiLiteControl(controlHandle(dItem), 0);
@@ -1092,11 +1116,12 @@ implementation
 							Mailer^^.AllowCrashMail := true;
 						SetCheckBox(MailDilg, 9, Mailer^^.AllowCrashMail);
 					end;
-					10, 11, 12: 
+					10, 11, 12, 14: 
 					begin
 						SetCheckBox(MailDilg, 10, False);
 						SetCheckBox(MailDilg, 11, False);
 						SetCheckBox(MailDilg, 12, False);
+						SetCheckBox(MailDilg, 14, False);
 						if itemHit = 10 then
 						begin
 							Mailer^^.SubLaunchMailer := 0;
@@ -1111,6 +1136,11 @@ implementation
 						begin
 							Mailer^^.SubLaunchMailer := 2;
 							SetCheckBox(MailDilg, 12, True);
+						end
+						else if itemHit = 14 then
+						begin
+							Mailer^^.SubLaunchMailer := 3;
+							SetCheckBox(MailDilg, 14, True);
 						end;
 					end;
 					6: 

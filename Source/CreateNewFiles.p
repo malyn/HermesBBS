@@ -143,8 +143,11 @@ implementation
 			ResetSystemColors(freshSyst);
 			DebugTelnet := false;
 			DebugTelnetToFile := false;
+{ Added in 3.5.11b2 }
+			DebugWebTosser := false;
+			DebugWebTosserToFile := false;
 { Reserved bytes for expansion. }
-			for i := 1 to 470 do
+			for i := 1 to 468 do
 				reserved[i] := char(0);
 		end;
 		result := Create(Path, 0, 'HRMS', 'DATA');
@@ -240,7 +243,7 @@ implementation
 			Application := HDPath;
 			GenericPath := HDPath;
 			MailerAware := false;
-			SubLaunchMailer := 2;
+			SubLaunchMailer := 3;
 			EventPath := concat(HDPath, 'System Folder:Preferences:');
 			MailerNode := 1;
 			AllowCrashMail := false;

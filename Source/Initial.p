@@ -644,7 +644,7 @@ interface
 				Application: Str255;
 				GenericPath: Str255;
 				MailerAware: Boolean;
-				SubLaunchMailer: signedByte; {0 = Shutdown BBS, 1 = Single Node Shutdown, 2 = AppleEvents}
+				SubLaunchMailer: signedByte; {0 = Shutdown BBS, 1 = Single Node Shutdown, 2 = AppleEvents, 3 = Hermes Web Tosser}
 				EventPath: Str255;
 				MailerNode: integer;
 				AllowCrashMail: boolean;
@@ -654,7 +654,9 @@ interface
 				UseRealNames: boolean;
 				CrashMailPath: Str255;
 				UseEMSI: boolean;
-				reserved: packed array[0..735] of Char;
+				hwtNodeNumber, hwtPassword: Str63;
+				hwtOriginLine: Str255;
+				reserved: packed array[0..351] of Char;
 			end;
 
 		ULR = record
@@ -1512,6 +1514,16 @@ interface
 (* End Mailer Import Stuff *)
 { Added in 3.5.10b2 }
 		runtimeExternalNum: integer;
+{ Added in 3.5.11b2 }
+		shouldPollWebTosser, arePollingWebTosser: boolean;
+		debugWebTosser, debugWebTosserToFile: boolean;
+		webTosserDo, webTosserDoNext, webTosserDoNextFile: (WebTosserConnect, WebTosserConnectWait, WebTosserSendNodeNumber, WebTosserSendPassword, WebTosserSendAreasBBSHeader, WebTosserSendAreasBBSFile, WebTosserSendGenericExportHeader, WebTosserSendGenericExportFile, WebTosserSendRequestTrailer, WebTosserReceiveGenericImport, WebTosserSend, WebTosserSendFile, WebTosserSendWait, WebTosserDisconnect, WebTosserDisconnectWait, WebTosserDone);
+		webTosserTCP: HermesTCP;
+		webTosserMimeBoundary: Str63;
+		webTosserAreasBbsRefNum, webTosserGenericExportRefNum, webTosserGenericImportRefNum: integer;
+		webTosserSending: Str255;
+		webTosserSendingRefNum: integer;
+		webTosserParseGenericImportState: (wtpgiSkippingHeader, wtpgiSkippingLF1, wtpgiSkippingCR2, wtpgiSkippingLF2, wtpgiReadingFile);
 
 	procedure InitHermes;
 	function QuickCheckSerial: boolean;
@@ -2058,16 +2070,16 @@ implementation
 
 		nyet := GetMHandle(mSysOp);
 		if (theNodes[visibleNode]^.nodeType <= 0) then
-			DisableItem(getMHandle(mSysop), 14)
+			DisableItem(getMHandle(mSysop), 15)
 		else
-			EnableItem(getMHandle(mSysop), 14);
+			EnableItem(getMHandle(mSysop), 15);
 		for i := 1 to InitSystHand^^.numNodes do
 		begin
 			tempstring := stringOf(i : 0, ': ', theNodes[i]^.nodename);
 			AppendMenu(nyet, ' ');
 			SetItem(nyet, countMItems(nyet), tempstring);
 		end;
-		CheckItem(nyet, visibleNode + 15, true);
+		CheckItem(nyet, visibleNode + 16, true);
 		AppendMenu(nyet, '(-');
 		AppendMenu(nyet, 'Status Window/\');
 

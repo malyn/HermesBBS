@@ -44,6 +44,7 @@ interface
 { TCP functions. }
 	function CreateTCPStream (tcpPtr: HermesTCPPtr): OSErr;
 	procedure DestroyTCPStream (tcpPtr: HermesTCPPtr);
+	procedure InitiateTCPConnection (tcpPtr: HermesTCPPtr; remoteAddress: ipAddr; remotePort: ipPort; timeout: Byte);
 	procedure StartTCPListener (tcpPtr: HermesTCPPtr);
 	function TCPBytesToRead (tcpPtr: HermesTCPPtr): integer;
 	procedure AbortTCPConnection (tcpPtr: HermesTCPPtr);
@@ -117,6 +118,36 @@ implementation
 		DisposPtr(tcpPtr^.tcpBuffer);
 		DisposPtr(Ptr(tcpPtr^.tcpPBPtr));
 		tcpPtr^.tcpPBPtr := nil;
+	end;
+
+	procedure InitiateTCPConnection (tcpPtr: HermesTCPPtr; remoteAddress: ipAddr; remotePort: ipPort; timeout: Byte);
+		var
+			err: OSErr;
+	begin
+		with tcpPtr^.tcpPBPtr^ do
+		begin
+			ioResult := 1;
+			ioCompletion := nil;
+
+			ioCRefNum := ippDrvrRefNum;
+			csCode := TCPcsActiveOpen;
+			tcpStream := tcpPtr^.tcpStreamPtr;
+
+			open.ulpTimeoutValue := timeout;
+			open.ulpTimeoutAction := 1;
+			open.validityFlags := 0;
+			open.remotehost := remoteAddress;
+			open.remoteport := remotePort;
+			open.localport := 0;
+			open.tosFlags := 0;
+			open.precedence := 0;
+			open.dontFrag := 0;
+			open.timeToLive := 0;
+			open.security := 0;
+			open.optionCnt := 0;
+			open.userDataPtr := nil;
+		end;
+		err := PBControl(ParmBlkptr(tcpPtr^.tcpPBPtr), true);
 	end;
 
 	procedure StartTCPListener (tcpPtr: HermesTCPPtr);

@@ -1363,7 +1363,7 @@ implementation
 					if BAnd(event.modifiers, optionKey) <> 0 then
 						SwitchNode(conopt2Num(key))
 					else
-						DoMenuCommand(MenuKey(key));
+						DoMenuCommand(MenuKey(key), event.modifiers);
 					exit(doKeyDetect);
 				end;
 			end;
