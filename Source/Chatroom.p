@@ -3,7 +3,7 @@ unit Chatroom;
 
 interface
 	uses
-		AppleTalk, ADSP, Serial, Sound, Initial, LoadAndSave, NodePrefs2, NodePrefs, SystemPrefs2, SystemPrefs, inpOut4, ChatroomUtils;
+		AppleTalk, ADSP, Serial, Sound, TCPTypes, Initial, LoadAndSave, NodePrefs2, NodePrefs, SystemPrefs2, SystemPrefs, inpOut4, ChatroomUtils;
 
 	function DecipherActionWord (User: str255; TargetNode: integer; TheString: str255; NodeAimedAt: integer): str255;
 	procedure WrapActionText (TheText: str255);

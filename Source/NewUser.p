@@ -3,7 +3,7 @@ unit NewUser;
 
 interface
 	uses
-		AppleTalk, ADSP, Serial, Sound, Initial, LoadAndSave, NodePrefs2, NodePrefs, SystemPrefs2, User, inpOut4, MessNTextOutput, FileTrans;
+		AppleTalk, ADSP, Serial, Sound, TCPTypes, Initial, LoadAndSave, NodePrefs2, NodePrefs, SystemPrefs2, User, inpOut4, MessNTextOutput, FileTrans;
 
 	procedure DoQuiz;
 	procedure PrintUserEntry;

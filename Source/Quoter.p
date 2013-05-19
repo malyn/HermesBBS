@@ -24,7 +24,7 @@ unit Quoter;
 interface
 
 	uses
-		AppleTalk, ADSP, Serial, Sound, Initial, LoadAndSave, NodePrefs2, Message_Editor, inpOut4;
+		AppleTalk, ADSP, Serial, Sound, TCPTypes, Initial, LoadAndSave, NodePrefs2, Message_Editor, inpOut4;
 
 	procedure OutputColorBar;
 	function MakeColorSequence (Which: integer): str255;

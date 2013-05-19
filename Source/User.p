@@ -308,7 +308,7 @@ implementation
 
 					ioCRefNum := ippDrvrRefNum;
 					csCode := TCPcsStatus;
-					tcpStream := StreamPtr(curGlobs^.nodeTCPStreamPtr);
+					tcpStream := nodeTCP.tcpStreamPtr;
 
 					status.userDataPtr := nil;
 				end;

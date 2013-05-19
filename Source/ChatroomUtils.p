@@ -3,7 +3,7 @@ unit ChatroomUtils;
 
 interface
 	uses
-		AppleTalk, ADSP, Serial, Sound, Initial, NodePrefs2, SystemPrefs, Message_Editor, Terminal, inpOut4;
+		AppleTalk, ADSP, Serial, Sound, TCPTypes, Initial, NodePrefs2, SystemPrefs, Message_Editor, Terminal, inpOut4;
 
 	procedure DoShowChatMenuORHelp (Menu: boolean);
 	procedure UpdateANSIInChannel (WhichChannel: integer);

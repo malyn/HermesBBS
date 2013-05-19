@@ -3,7 +3,7 @@ unit HUtils6;
 
 interface
 	uses
-		AppleTalk, ADSP, Serial, Sound, Notification, PPCToolbox, Processes, EPPC, AppleEvents, NewUser, Initial, LoadAndSave, NodePrefs2, NodePrefs, SystemPrefs2, SystemPrefs, Message_Editor, User, Terminal, inpOut4, inpOut3, Quoter, inpOut, MessNTextOutput, MessageSearcher, Chatroom, FileTrans3, FileTrans2, FileTrans, HermesUtils, HUtilsOne, HUtils2, HUtils3, HUtils4;
+		AppleTalk, ADSP, Serial, Sound, Notification, PPCToolbox, Processes, EPPC, AppleEvents, TCPTypes, NewUser, Initial, LoadAndSave, NodePrefs2, NodePrefs, SystemPrefs2, SystemPrefs, Message_Editor, User, Terminal, inpOut4, inpOut3, Quoter, inpOut, MessNTextOutput, MessageSearcher, Chatroom, FileTrans3, FileTrans2, FileTrans, HermesUtils, HUtilsOne, HUtils2, HUtils3, HUtils4;
 
 	procedure SetBookmark;
 

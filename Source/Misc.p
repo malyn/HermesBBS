@@ -4,7 +4,7 @@ unit Misc;
 interface
 
 	uses
-		AppleTalk, ADSP, Serial, Sound, initial, LoadAndSave, NodePrefs2, NodePrefs, User;
+		AppleTalk, ADSP, Serial, Sound, TCPTypes, Initial, LoadAndSave, NodePrefs2, NodePrefs, User;
 
 	procedure Open_FB_Edit;
 	procedure Close_FB_Edit;

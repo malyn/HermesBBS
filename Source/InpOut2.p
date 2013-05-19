@@ -3,7 +3,7 @@ unit inpOut2;
 
 interface
 	uses
-		AppleTalk, ADSP, Serial, Sound, aliases, Initial, LoadAndSave, NodePrefs2, NodePrefs, SystemPrefs, Terminal, inpOut3;
+		AppleTalk, ADSP, Serial, Sound, aliases, TCPTypes, Initial, LoadAndSave, NodePrefs2, NodePrefs, SystemPrefs, Terminal, inpOut3;
 
 	procedure SysopFileConfigure;
 	procedure DoUpdate (window: WindowPtr);

@@ -3,7 +3,7 @@ unit Terminal;
 interface
 
 	uses
-		AppleTalk, ADSP, Serial, Sound, Initial, NodePrefs2, SystemPrefs;
+		AppleTalk, ADSP, Serial, Sound, TCPTypes, Initial, NodePrefs2, SystemPrefs;
 
 	const
 		NOTHINGSPACE = 2;

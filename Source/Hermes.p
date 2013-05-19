@@ -1036,16 +1036,16 @@ program Hermes;
 				begin
 					for i := 1 to InitSystHand^^.NumNodes do
 						if (theNodes[i]^.boardMode = Waiting) and (theNodes[i]^.nodeType = 3) then
-							if ((TCPControlBlockPtr(theNodes[i]^.nodeTCPPBPtr)^.ioResult <> 1) and (TCPControlBlockPtr(theNodes[i]^.nodeTCPPBPtr)^.open.localport <> 0)) then
+							if ((theNodes[i]^.nodeTCP.tcpPBPtr^.ioResult <> 1) and (theNodes[i]^.nodeTCP.tcpPBPtr^.open.localport <> 0)) then
 							begin
 								curGlobs := theNodes[i];
 								activeNode := i;
-								if ((TCPControlBlockPtr(curGlobs^.nodeTCPPBPtr)^.ioResult = 0) and answerCalls) then
+								if ((curGlobs^.nodeTCP.tcpPBPtr^.ioResult = 0) and answerCalls) then
 								begin
 									curGlobs^.currentBaud := 57600;
 									curGlobs^.curBaudNote := TCPNAME;
 									curGlobs^.sysopLogon := false;
-									IPAddrToString(TCPControlBlockPtr(curGlobs^.nodeTCPPBPtr)^.open.remotehost, t1);
+									IPAddrToString(curGlobs^.nodeTCP.tcpPBPtr^.open.remotehost, t1);
 									GetDateTime(tempLong);
 									IUTimeString(tempLong, true, t2);
 									LogThis(concat('TCP connection from ', t1, ' made at ', t2), 0);
@@ -1056,8 +1056,8 @@ program Hermes;
 								end
 								else
 								begin
-									AbortTCPConnection;
-									StartTCPListener;
+									AbortTCPConnection(@curGlobs^.nodeTCP);
+									StartTCPListener(@curGlobs^.nodeTCP);
 								end;
 							end;
 				end;

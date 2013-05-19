@@ -2,7 +2,7 @@
 unit Message_Editor2;
 interface
 	uses
-		AppleTalk, ADSP, Serial, Sound, Initial, LoadAndSave, NodePrefs2;
+		AppleTalk, ADSP, Serial, Sound, TCPTypes, Initial, LoadAndSave, NodePrefs2;
 
 	procedure Open_Message_Setup;
 	procedure Update_Message_Setup (theWindow: WindowPtr);

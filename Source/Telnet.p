@@ -136,29 +136,29 @@ implementation
 			writeBytes[2] := code;
 
 		{ Send the sequence. }
-			wdsPtr(curGlobs^.nodeTCPWDSPtr)^.size := 3;
-			wdsPtr(curGlobs^.nodeTCPWDSPtr)^.buffer := @writeBytes;
-			wdsPtr(curGlobs^.nodeTCPWDSPtr)^.term := 0;
+			nodeTCP.tcpWDSPtr^.size := 3;
+			nodeTCP.tcpWDSPtr^.buffer := @writeBytes;
+			nodeTCP.tcpWDSPtr^.term := 0;
 
-			with TCPControlBlockPtr(curGlobs^.nodeTCPPBPtr)^ do
+			with nodeTCP.tcpPBPtr^ do
 			begin
 				ioResult := 1;
 				ioCompletion := nil;
 
 				ioCRefNum := ippDrvrRefNum;
 				csCode := TCPcsSend;
-				tcpStream := StreamPtr(curGlobs^.nodeTCPStreamPtr);
+				tcpStream := nodeTCP.tcpStreamPtr;
 
 				send.ulpTimeoutValue := 0;
 				send.ulpTimeoutAction := -1;
 				send.validityFlags := $c0;
 				send.pushFlag := 0;
 				send.urgentFlag := 0;
-				send.wds := wdsPtr(curGlobs^.nodeTCPWDSPtr);
+				send.wds := nodeTCP.tcpWDSPtr;
 				send.userDataPtr := nil;
 			end;
 
-			result := PBControl(curGlobs^.nodeTCPPBPtr, false);
+			result := PBControl(ParmBlkPtr(nodeTCP.tcpPBPtr), false);
 		end;
 	end;
 
@@ -232,7 +232,7 @@ implementation
 				2: 
 				begin { Telnet negotiation loop. }
 2:				{ Only continue if there is data to read. }
-					readCnt := TCPBytesToRead;
+					readCnt := TCPBytesToRead(@nodeTCP);
 					if readCnt <> 0 then
 					begin
 					{ Read a byte. }
@@ -243,7 +243,7 @@ implementation
 
 							ioCRefNum := ippDrvrRefNum;
 							csCode := TCPcsRcv;
-							tcpStream := StreamPtr(nodeTCPStreamPtr);
+							tcpStream := nodeTCP.tcpStreamPtr;
 
 							receive.commandTimeoutValue := 0;
 							receive.markFlag := 0;

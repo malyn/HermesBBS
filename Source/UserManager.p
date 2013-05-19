@@ -3,7 +3,7 @@ unit UserManager;
 
 interface
 	uses
-		AppleTalk, ADSP, Serial, Sound, initial, LoadAndSave, NodePrefs2, Message_Editor, User;
+		AppleTalk, ADSP, Serial, Sound, TCPTypes, Initial, LoadAndSave, NodePrefs2, Message_Editor, User;
 
 	procedure Open_GlobalUEdit;
 	procedure Update_GlobalUEdit (theWindow: WindowPtr);

@@ -5,7 +5,7 @@ unit InpOut;
 interface
 
 	uses
-		AppleTalk, ADSP, Serial, Sound, Initial, LoadAndSave, NodePrefs2, NodePrefs, SystemPrefs, Message_Editor, Terminal, inpOut4, inpOut3, inpOut2, Quoter;
+		AppleTalk, ADSP, Serial, Sound, TCPTypes, Initial, LoadAndSave, NodePrefs2, NodePrefs, SystemPrefs, Message_Editor, Terminal, inpOut4, inpOut3, inpOut2, Quoter;
 	procedure LineChar (myChar: char);
 	procedure EnterMessage (maxLins: integer);
 	procedure Read_Mail;

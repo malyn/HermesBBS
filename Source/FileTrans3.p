@@ -3,7 +3,7 @@ unit FIleTrans3;
 
 interface
 	uses
-		AppleTalk, ADSP, Serial, Sound, Initial, Misc2, InpOut4, InpOut3, ChatroomUtils, nodeprefs, nodeprefs2, inpOut2, InpOut, User, SystemPrefs, Message_Editor, terminal;
+		AppleTalk, ADSP, Serial, Sound, TCPTypes, Initial, Misc2, InpOut4, InpOut3, ChatroomUtils, nodeprefs, nodeprefs2, inpOut2, InpOut, User, SystemPrefs, Message_Editor, terminal;
 
 	procedure DoNodeStuff;
 	procedure DoRename;

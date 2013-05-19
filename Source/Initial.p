@@ -4,7 +4,7 @@ unit Initial;
 interface
 
 	uses
-		Serial, Sound, AppleTalk, ADSP, CommResources, CRMSerialDevices, CTBUtilities, GestaltEqu;
+		Serial, Sound, AppleTalk, ADSP, CommResources, CRMSerialDevices, CTBUtilities, GestaltEqu, TCPTypes;
 	const
 		HERMES_VERSION = '3.5.11b2';
 		SYSTREC_VERSION = 359;
@@ -141,6 +141,14 @@ interface
 		IntPtrType = ^integer;
 		LongPtrType = ^longint;
 		Str255PtrType = ^Str255;
+
+		HermesTCPPtr = ^HermesTCP;
+		HermesTCP = record
+				tcpPBPtr: TCPControlBlockPtr;
+				tcpBuffer: Ptr;
+				tcpStreamPtr: StreamPtr;
+				tcpWDSPtr: wdsPtr;
+			end;
 
 		PopupHand = ^PopupPtr;
 		PopupPtr = ^PopupPrivateData;
@@ -1156,10 +1164,7 @@ interface
 				MessageSearch: MessageSearchHand;
 				wasSearching, noPause: boolean;
 { Added in 3.5.9b1 }
-				nodeTCPPBPtr: ParmBlkPtr; { a TCPControlBlockPtr, actually }
-				nodeTCPBuffer: Ptr;
-				nodeTCPStreamPtr: Ptr;
-				nodeTCPWDSPtr: Ptr;
+				nodeTCP: HermesTCP;
 			end;
 
 		FullUNamesRec = record
@@ -1588,10 +1593,10 @@ implementation
 				curBase := nil;
 				myEmailList := nil;
 				MessageSearch := nil;
-				nodeTCPPBPtr := nil;
-				nodeTCPBuffer := nil;
-				nodeTCPStreamPtr := nil;
-				nodeTCPWDSPtr := nil;
+				nodeTCP.tcpPBPtr := nil;
+				nodeTCP.tcpBuffer := nil;
+				nodeTCP.tcpStreamPtr := nil;
+				nodeTCP.tcpWDSPtr := nil;
 				nodeHnd := NodeHand(GetResource('Node', i - 1));
 				if nodeHnd <> nil then
 				begin

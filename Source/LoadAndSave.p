@@ -4,7 +4,7 @@ unit LoadAndSave;
 interface
 
 	uses
-		AppleTalk, ADSP, Serial, Sound, Initial, CTBUtilities, CreateNewFiles;
+		AppleTalk, ADSP, Serial, Sound, TCPTypes, Initial, CTBUtilities, CreateNewFiles;
 
 	procedure WriteUser (theUser: UserRec);
 	procedure DoSystRec (Save: boolean);

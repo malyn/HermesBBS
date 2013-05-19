@@ -5,7 +5,7 @@ unit HUtils3;
 interface
 
 	uses
-		AppleTalk, ADSP, Serial, Sound, Initial, LoadAndSave, SystemPrefs, Import, User, InpOut4, InpOut3, inpOut2, Quoter, InpOut, HUtils2, HermesUtils, FileTrans, FileTrans2, FileTrans3, Message_Editor, nodeprefs, nodeprefs2, terminal, notification, PPCToolbox, Processes, EPPC, AppleEvents;
+		AppleTalk, ADSP, Serial, Sound, TCPTypes, Initial, LoadAndSave, SystemPrefs, Import, User, InpOut4, InpOut3, inpOut2, Quoter, InpOut, HUtils2, HermesUtils, FileTrans, FileTrans2, FileTrans3, Message_Editor, nodeprefs, nodeprefs2, terminal, notification, PPCToolbox, Processes, EPPC, AppleEvents;
 
 	procedure ChangeDefaults;
 	procedure MultiNodeChat;

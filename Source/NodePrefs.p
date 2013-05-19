@@ -42,12 +42,12 @@ interface
 	procedure CloseADSPListener;
 	procedure OpenModemFile (name: str255);
 { TCP functions. }
-	function CreateTCPStream: OSErr;
-	procedure DestroyTCPStream;
-	procedure StartTCPListener;
-	function TCPBytesToRead: integer;
-	procedure AbortTCPConnection;
-	procedure CloseTCPConnection;
+	function CreateTCPStream (tcpPtr: HermesTCPPtr): OSErr;
+	procedure DestroyTCPStream (tcpPtr: HermesTCPPtr);
+	procedure StartTCPListener (tcpPtr: HermesTCPPtr);
+	function TCPBytesToRead (tcpPtr: HermesTCPPtr): integer;
+	procedure AbortTCPConnection (tcpPtr: HermesTCPPtr);
+	procedure CloseTCPConnection (tcpPtr: HermesTCPPtr);
 	procedure IPAddrToString (ip: longint; var addrStr: Str255);
 
 
@@ -60,19 +60,19 @@ implementation
 
 {$S NodePrefs_1}
 
-	function CreateTCPStream: OSErr;
+	function CreateTCPStream (tcpPtr: HermesTCPPtr): OSErr;
 		var
 			err: OSErr;
 			cb: TCPControlBlock;
 	begin
 	{ Create the TCP control block for this stream. }
-		curGlobs^.nodeTCPPBPtr := ParmBlkPtr(NewPtr(SizeOf(TCPControlBlock)));
+		tcpPtr^.tcpPBPtr := TCPControlBlockPtr(NewPtr(SizeOf(TCPControlBlock)));
 
 	{ Create the TCP buffer for this stream. }
-		curGlobs^.nodeTCPBuffer := NewPtr(TCPBUFSIZE);
+		tcpPtr^.tcpBuffer := NewPtr(TCPBUFSIZE);
 
 	{ Create the WDS pointer for this stream. }
-		curGlobs^.nodeTCPWDSPtr := NewPtr(SizeOf(wdsType));
+		tcpPtr^.tcpWDSPtr := wdsPtr(NewPtr(SizeOf(wdsType)));
 
 	{ Issue the create call. }
 		with cb do
@@ -83,22 +83,22 @@ implementation
 			ioCRefNum := ippDrvrRefNum;
 			csCode := TCPcsCreate;
 
-			create.rcvBuff := curGlobs^.nodeTCPBuffer;
+			create.rcvBuff := tcpPtr^.tcpBuffer;
 			create.rcvBuffLen := TCPBUFSIZE;
 			create.notifyProc := nil;
 			create.userDataPtr := nil;
 		end;
 		err := PBControl(ParmBlkPtr(@cb), false);
 		if (err = noErr) then
-			curGlobs^.nodeTCPStreamPtr := Ptr(cb.tcpStream)
+			tcpPtr^.tcpStreamPtr := Ptr(cb.tcpStream)
 		else
-			curGlobs^.nodeTCPStreamPtr := nil;
+			tcpPtr^.tcpStreamPtr := nil;
 
 	{ Return. }
 		CreateTCPStream := err;
 	end;
 
-	procedure DestroyTCPStream;
+	procedure DestroyTCPStream (tcpPtr: HermesTCPPtr);
 		var
 			err: OSErr;
 			cb: TCPControlBlock;
@@ -108,29 +108,29 @@ implementation
 		begin
 			ioCRefNum := ippDrvrRefNum;
 			csCode := TCPcsRelease;
-			tcpStream := StreamPtr(curGlobs^.nodeTCPStreamPtr);
+			tcpStream := StreamPtr(tcpPtr^.tcpStreamPtr);
 		end;
 		err := PBControl(ParmBlkPtr(@cb), false);
 
 	{ Destroy all of our pointers. }
-		DisposPtr(curGlobs^.nodeTCPWDSPtr);
-		DisposPtr(curGlobs^.nodeTCPBuffer);
-		DisposPtr(Ptr(curGlobs^.nodeTCPPBPtr));
-		curGlobs^.nodeTCPPBPtr := nil;
+		DisposPtr(Ptr(tcpPtr^.tcpWDSPtr));
+		DisposPtr(tcpPtr^.tcpBuffer);
+		DisposPtr(Ptr(tcpPtr^.tcpPBPtr));
+		tcpPtr^.tcpPBPtr := nil;
 	end;
 
-	procedure StartTCPListener;
+	procedure StartTCPListener (tcpPtr: HermesTCPPtr);
 		var
 			err: OSErr;
 	begin
-		with TCPControlBlockPtr(curGlobs^.nodeTCPPBPtr)^ do
+		with TCPControlBlockPtr(tcpPtr^.tcpPBPtr)^ do
 		begin
 			ioResult := 1;
 			ioCompletion := nil;
 
 			ioCRefNum := ippDrvrRefNum;
 			csCode := TCPcsPassiveOpen;
-			tcpStream := StreamPtr(curGlobs^.nodeTCPStreamPtr);
+			tcpStream := tcpPtr^.tcpStreamPtr;
 
 			open.validityFlags := 0;
 			open.commandTimeoutValue := 0;
@@ -143,10 +143,10 @@ implementation
 			open.optionCnt := 0;
 			open.userDataPtr := nil;
 		end;
-		err := PBControl(curGlobs^.nodeTCPPBPtr, true);
+		err := PBControl(ParmBlkptr(tcpPtr^.tcpPBPtr), true);
 	end;
 
-	function TCPBytesToRead: integer;
+	function TCPBytesToRead (tcpPtr: HermesTCPPtr): integer;
 		var
 			err: OSErr;
 			cb: TCPControlBlock;
@@ -158,7 +158,7 @@ implementation
 
 			ioCRefNum := ippDrvrRefNum;
 			csCode := TCPcsStatus;
-			tcpStream := StreamPtr(curGlobs^.nodeTCPStreamPtr);
+			tcpStream := tcpPtr^.tcpStreamPtr;
 
 			status.userDataPtr := nil;
 		end;
@@ -169,7 +169,7 @@ implementation
 			TCPBytesToRead := 0;
 	end;
 
-	procedure AbortTCPConnection;
+	procedure AbortTCPConnection (tcpPtr: HermesTCPPtr);
 		var
 			err: OSErr;
 			cb: TCPControlBlock;
@@ -181,14 +181,14 @@ implementation
 
 			ioCRefNum := ippDrvrRefNum;
 			csCode := TCPcsAbort;
-			tcpStream := StreamPtr(curGlobs^.nodeTCPStreamPtr);
+			tcpStream := tcpPtr^.tcpStreamPtr;
 
 			abort.userDataPtr := nil;
 		end;
 		err := PBControl(ParmBlkPtr(@cb), false);
 	end;
 
-	procedure CloseTCPConnection;
+	procedure CloseTCPConnection (tcpPtr: HermesTCPPtr);
 		var
 			err: OSErr;
 			cb: TCPControlBlock;
@@ -200,7 +200,7 @@ implementation
 
 			ioCRefNum := ippDrvrRefNum;
 			csCode := TCPcsClose;
-			tcpStream := StreamPtr(curGlobs^.nodeTCPStreamPtr);
+			tcpStream := tcpPtr^.tcpStreamPtr;
 
 			close.ulpTimeoutValue := 0;
 			close.ulpTimeoutAction := -1;
@@ -427,7 +427,7 @@ implementation
 				end;
 				3: 
 				begin
-					DestroyTCPStream;
+					DestroyTCPStream(@nodeTCP);
 				end;
 				otherwise
 			end;
@@ -511,12 +511,12 @@ implementation
 				end;
 				3: 
 				begin
-					if nodeTCPPBPtr = nil then
+					if nodeTCP.tcpPBPtr = nil then
 					begin
-						result := CreateTCPStream;
+						result := CreateTCPStream(@nodeTCP);
 						if (result <> noErr) then
 							goto 100;
-						StartTCPListener;
+						StartTCPListener(@nodeTCP);
 					end;
 				end;
 				-1: 
@@ -1618,7 +1618,7 @@ implementation
 				if (nodeType = 3) then
 				begin
 					modemInput := ippDrvrRefNum;
-					errorReason := StringHandle(nodeTCPStreamPtr);
+					errorReason := StringHandle(nodeTCP.tcpStreamPtr);
 					flags[usingTCP] := true;
 				end
 				else if (nodeType = 2) then

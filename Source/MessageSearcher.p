@@ -3,7 +3,7 @@ unit MessageSearcher;
 
 interface
 	uses
-		AppleTalk, ADSP, Serial, Sound, Initial, LoadAndSave, NodePrefs2, Message_Editor, inpOut4, Quoter, MessNTextOutput;
+		AppleTalk, ADSP, Serial, Sound, TCPTypes, Initial, LoadAndSave, NodePrefs2, Message_Editor, inpOut4, Quoter, MessNTextOutput;
 
 	procedure DoMessageSearch;
 

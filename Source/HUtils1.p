@@ -3,7 +3,7 @@ unit HUtilsOne;
 
 interface
 	uses
-		AppleTalk, ADSP, Serial, Sound, Initial, LoadAndSave, NodePrefs2, NodePrefs, Message_Editor, User, inpOut4;
+		AppleTalk, ADSP, Serial, Sound, TCPTypes, Initial, LoadAndSave, NodePrefs2, NodePrefs, Message_Editor, User, inpOut4;
 
 	procedure DoUserEdit;
 	procedure doBBSlist;

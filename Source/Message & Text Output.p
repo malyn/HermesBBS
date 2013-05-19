@@ -3,7 +3,7 @@ unit MessNTextOutput;
 
 interface
 	uses
-		AppleTalk, ADSP, Serial, Sound, Initial, NodePrefs2, Message_Editor, Terminal, inpOut4;
+		AppleTalk, ADSP, Serial, Sound, TCPTypes, Initial, NodePrefs2, Message_Editor, Terminal, inpOut4;
 
 	procedure PrintCurMessage (updateQPtrs: boolean);
 	procedure PrintCurEMail;

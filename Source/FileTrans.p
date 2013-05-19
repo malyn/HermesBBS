@@ -3,7 +3,7 @@ unit FileTrans;
 
 interface
 	uses
-		AppleTalk, ADSP, Serial, Sound, Initial, InpOut4, InpOut3, FileTrans2, FileTrans3, inpOut2, InpOut, User, terminal, SystemPrefs, Message_Editor, NodePrefs, NodePrefs2;
+		AppleTalk, ADSP, Serial, Sound, TCPTypes, Initial, InpOut4, InpOut3, FileTrans2, FileTrans3, inpOut2, InpOut, User, terminal, SystemPrefs, Message_Editor, NodePrefs, NodePrefs2;
 
 	procedure DoUpload;
 	procedure DoGFiles;

@@ -5,7 +5,7 @@ unit HUtils4;
 interface
 
 	uses
-		AppleTalk, ADSP, Serial, Sound, Initial, SystemPrefs, User, InpOut4, InpOut3, inpOut2, Quoter, InpOut, MessNTextOutput, HUtils2, HermesUtils, FileTrans, FileTrans2, FileTrans3, Message_Editor, nodeprefs, nodeprefs2, terminal, notification, PPCToolbox, Processes, EPPC, AppleEvents, HUtils3, Misc2;
+		AppleTalk, ADSP, Serial, Sound, TCPTypes, Initial, SystemPrefs, User, InpOut4, InpOut3, inpOut2, Quoter, InpOut, MessNTextOutput, HUtils2, HermesUtils, FileTrans, FileTrans2, FileTrans3, Message_Editor, nodeprefs, nodeprefs2, terminal, notification, PPCToolbox, Processes, EPPC, AppleEvents, HUtils3, Misc2;
 
 	procedure DoListUsers;
 	procedure DoAllRead;

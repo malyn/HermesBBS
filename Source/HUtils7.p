@@ -396,7 +396,7 @@ implementation
 				begin
 					if (nodeType = 3) then
 					begin
-						if (TCPControlBlockPtr(nodeTCPPBPtr)^.ioResult <> 1) then
+						if (nodeTCP.tcpPBPtr^.ioResult <> 1) then
 							if AsyncMWrite(outputRef, 0, nil) <> noErr then
 								;
 					end

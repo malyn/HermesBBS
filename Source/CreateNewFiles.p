@@ -4,7 +4,7 @@ unit CreateNewFiles;
 interface
 
 	uses
-		AppleTalk, ADSP, Serial, Sound, CommResources, CRMSerialDevices, Initial, NodePrefs2;
+		AppleTalk, ADSP, Serial, Sound, CommResources, CRMSerialDevices, TCPTypes, Initial, NodePrefs2;
 
 	procedure CreateSystemPrefs (Path, HFPath: str255);
 	procedure CreateMessage (Path: str255);

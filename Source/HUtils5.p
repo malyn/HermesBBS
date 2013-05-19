@@ -1097,7 +1097,7 @@ implementation
 			begin
 				if (BoardMode = User) then
 				begin
-					i := TCPBytesToRead;
+					i := TCPBytesToRead(@nodeTCP);
 					if (i > 0) then
 					begin
 						b := 250 - length(typeBuffer);
@@ -1110,7 +1110,7 @@ implementation
 
 							ioCRefNum := ippDrvrRefNum;
 							csCode := TCPcsRcv;
-							tcpStream := StreamPtr(nodeTCPStreamPtr);
+							tcpStream := nodeTCP.tcpStreamPtr;
 
 							receive.commandTimeoutValue := 0;
 							receive.markFlag := 0;

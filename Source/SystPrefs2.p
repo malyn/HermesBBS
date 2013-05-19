@@ -4,7 +4,7 @@ unit SystemPrefs2;
 interface
 
 	uses
-		AppleTalk, ADSP, Serial, Sound, Initial, nodePrefs, nodePrefs2, CTBUtilities;
+		AppleTalk, ADSP, Serial, Sound, TCPTypes, Initial, nodePrefs, nodePrefs2, CTBUtilities;
 
 	procedure OpenStrings (which: integer);
 	procedure CloseStrings;

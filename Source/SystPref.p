@@ -4,7 +4,7 @@ unit SystemPrefs;
 interface
 
 	uses
-		AppleTalk, ADSP, Serial, Sound, Initial, LoadAndSave, CTBUtilities, TCPTypes, NodePrefs, NodePrefs2, SystemPrefs2;
+		AppleTalk, ADSP, Serial, Sound, TCPTypes, Initial, LoadAndSave, CTBUtilities, TCPTypes, NodePrefs, NodePrefs2, SystemPrefs2;
 
 	procedure OpenSystemConfig (whichExternal: integer);
 	procedure CloseSystemConfig;
@@ -401,7 +401,7 @@ implementation
 						IHatePascal := true
 					else
 				else if (nodeType = 3) then
-					if (TCPControlBlockPtr(nodeTCPPBPtr)^.ioResult <> 1) then
+					if (nodeTCP.tcpPBPtr^.ioResult <> 1) then
 						IHatePascal := true;
 				if ((myBlocker.ioResult <> 1) and (nodeType = 1)) or IHatePascal then
 				begin
@@ -447,29 +447,29 @@ implementation
 					end
 					else if (nodeType = 3) then
 					begin
-						wdsPtr(curGlobs^.nodeTCPWDSPtr)^.size := myTems;
-						wdsPtr(curGlobs^.nodeTCPWDSPtr)^.buffer := sendingNow;
-						wdsPtr(curGlobs^.nodeTCPWDSPtr)^.term := 0;
+						nodeTCP.tcpWDSPtr^.size := myTems;
+						nodeTCP.tcpWDSPtr^.buffer := sendingNow;
+						nodeTCP.tcpWDSPtr^.term := 0;
 
-						with TCPControlBlockPtr(curGlobs^.nodeTCPPBPtr)^ do
+						with nodeTCP.tcpPBPtr^ do
 						begin
 							ioResult := 1;
 							ioCompletion := nil;
 
 							ioCRefNum := ippDrvrRefNum;
 							csCode := TCPcsSend;
-							tcpStream := StreamPtr(curGlobs^.nodeTCPStreamPtr);
+							tcpStream := nodeTCP.tcpStreamPtr;
 
 							send.ulpTimeoutValue := 0;
 							send.ulpTimeoutAction := -1;
 							send.validityFlags := $c0;
 							send.pushFlag := 0;
 							send.urgentFlag := 0;
-							send.wds := wdsPtr(curGlobs^.nodeTCPWDSPtr);
+							send.wds := nodeTCP.tcpWDSPtr;
 							send.userDataPtr := nil;
 						end;
 
-						result := PBControl(curGlobs^.nodeTCPPBPtr, false);
+						result := PBControl(ParmBlkPtr(curGlobs^.nodeTCP.tcpPBPtr), false);
 					end;
 				end;
 			end;

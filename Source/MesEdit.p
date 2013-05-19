@@ -2,7 +2,7 @@
 unit Message_Editor;
 interface
 	uses
-		AppleTalk, ADSP, Serial, Sound, Initial, systemprefs, SystemPrefs2, NodePrefs, NodePrefs2;
+		AppleTalk, ADSP, Serial, Sound, TCPTypes, Initial, systemprefs, SystemPrefs2, NodePrefs, NodePrefs2;
 
 	procedure OpenBase (whichForum, whichSub: integer; extraRec: boolean);
 	procedure SaveBase (wForum, wSub: integer);

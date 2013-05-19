@@ -4,7 +4,7 @@ unit NodePrefs2;
 interface
 
 	uses
-		AppleTalk, ADSP, Serial, Sound, CommResources, CRMSerialDevices, Initial;
+		AppleTalk, ADSP, Serial, Sound, CommResources, CRMSerialDevices, TCPTypes, Initial;
 
 	procedure SetTextBox (theDialog: dialogPtr; item: integer; text: str255);
 	function GetTextBox (theDialog: dialogPtr; item: integer): str255;

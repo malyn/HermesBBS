@@ -3,7 +3,7 @@ unit HermesUtils;
 
 interface
 	uses
-		AppleTalk, ADSP, Serial, Sound, Initial, LoadAndSave, NodePrefs2, NodePrefs, SystemPrefs, Message_Editor, User, inpOut4, Quoter, inpOut, MessNTextOutput, FileTrans3;
+		AppleTalk, ADSP, Serial, Sound, TCPTypes, Initial, LoadAndSave, NodePrefs2, NodePrefs, SystemPrefs, Message_Editor, User, inpOut4, Quoter, inpOut, MessNTextOutput, FileTrans3;
 
 	procedure DoEMail;
 	procedure DoMailCommand (Pres: str255);

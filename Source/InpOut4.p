@@ -820,7 +820,7 @@ implementation
 						end
 						else if (nodeType = 3) then
 						begin
-							CloseTCPConnection;
+							CloseTCPConnection(@nodeTCP);
 							hangingUp := 3;
 						end;
 						if sendLogOff then
@@ -863,7 +863,7 @@ implementation
 				end;
 				3: 
 				begin
-					if (TCPControlBlockPtr(curGlobs^.nodeTCPPBPtr)^.ioResult <> 1) then
+					if (nodeTCP.tcpPBPtr^.ioResult <> 1) then
 						hangingUp := 4;
 				end;
 				4: 
@@ -876,7 +876,7 @@ implementation
 				5: 
 				begin
 					if (nodeType = 3) then
-						StartTCPListener;
+						StartTCPListener(@nodeTCP);
 					result := FlushVol(nil, homeVol);
 					BoardMode := Failed;
 				end;

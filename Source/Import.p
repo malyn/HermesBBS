@@ -3,7 +3,7 @@ unit Import;
 
 interface
 	uses
-		AppleTalk, ADSP, Serial, Sound, initial, LoadAndSave, Message_Editor, NodePrefs2, NodePrefs, SystemPrefs2;
+		AppleTalk, ADSP, Serial, Sound, TCPTypes, Initial, LoadAndSave, Message_Editor, NodePrefs2, NodePrefs, SystemPrefs2;
 
 	procedure doDetermineZMH;
 	procedure doCheckForGeneric;

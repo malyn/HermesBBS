@@ -3,7 +3,7 @@ unit HUtils2;
 
 interface
 	uses
-		AppleTalk, ADSP, Serial, Sound, Initial, LoadAndSave, NodePrefs2, NodePrefs, SystemPrefs2, SystemPrefs, Message_Editor2, User, UserManager, Misc, Misc2, Terminal, inpOut4, inpOut3, inpOut2, Quoter, InpOut, ChatroomUtils, Chatroom, FileTrans2, FileTrans, HUtilsOne;
+		AppleTalk, ADSP, Serial, Sound, TCPTypes, Initial, LoadAndSave, NodePrefs2, NodePrefs, SystemPrefs2, SystemPrefs, Message_Editor2, User, UserManager, Misc, Misc2, Terminal, inpOut4, inpOut3, inpOut2, Quoter, InpOut, ChatroomUtils, Chatroom, FileTrans2, FileTrans, HUtilsOne;
 
 
 	procedure DoMenuCommand (menuResult: LONGINT);

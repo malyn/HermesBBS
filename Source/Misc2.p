@@ -4,7 +4,7 @@ unit Misc2;
 interface
 
 	uses
-		AppleTalk, ADSP, Serial, Sound, CommResources, Initial, CreateNewFiles, LoadAndSave, NodePrefs2, NodePrefs, Import;
+		AppleTalk, ADSP, Serial, Sound, CommResources, TCPTypes, Initial, CreateNewFiles, LoadAndSave, NodePrefs2, NodePrefs, Import;
 
 	procedure ClickInTransPrefs (theEvent: EventRecord; ItemHit: Integer);
 	procedure OpenTransPrefs;
