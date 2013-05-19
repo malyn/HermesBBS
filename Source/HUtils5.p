@@ -986,7 +986,7 @@ implementation
 				end
 				else if ((serKe = char($AE)) or ((Mailer^^.UseEMSI) and (Pos('EMSI_INQ', curPrompt) <> 0))) and (BoardSection = Logon) and ((LogonStage = Welcome) or (LogonStage = Name)) then
 				begin
-					if mailer^^.MailerAware and doCrashmail then
+					if mailer^^.MailerAware and (doCrashmail or ((nodeType = 3) and (Mailer^^.SubLaunchMailer = 3) and Mailer^^.AllowCrashmail)) then
 						if Mailer^^.SubLaunchMailer = 3 then
 						begin
 							if (nodeType = 3) and (not arePollingWebTosser) and (not shouldPollWebTosser) then
