@@ -425,8 +425,12 @@ implementation
 					end
 					else
 					begin
-						{ Check for a Generic Import file now (since we just finished receiving one). }
+						{ Check for a Generic Import file now (since we just finished receiving one).  We also have to set }
+						{ GBytes to the final size of the Generic Import file so that the DoCompareFileSize routine will see }
+						{ the same file size right away, otherwise it will take an additional 20 seconds for the next check }
+						{ to come along and see that the file size has stabilized. }
 						lastGenericCheck := 0;
+						GBytes := writeCnt;
 					end;
 
 					{ Delete the Generic Export file (if any). }
