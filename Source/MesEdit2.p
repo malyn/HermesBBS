@@ -603,7 +603,12 @@ implementation
 			s1 := GetTextBox(ForumDlg, 2);
 			if ((length(s1) < 1) or (length(s1) > 41)) or (s1[1] <= char(32)) then
 			begin
-				ProblemRep('The name of your forum must be from 1 to 41 characaters long. The forum name will not be changed.');
+				ProblemRep('The name of your forum must be from 1 to 41 characters long. The forum name will not be changed.');
+				s1 := MForum^^[Which].Name;
+			end
+			else if (pos(':', s1) <> 0) then
+			begin
+				ProblemRep('The name of your forum cannot contain a colon. The forum name will not be changed.');
 				s1 := MForum^^[Which].Name;
 			end
 			else
@@ -1037,7 +1042,12 @@ implementation
 			s1 := GetTextBox(ConferenceDlg, 10);
 			if ((length(s1) < 1) or (length(s1) > 41)) or (s1[1] <= char(32)) then
 			begin
-				ProblemRep('Your conference name has to be 1 to 41 characaters long. The conference name will not be changed.');
+				ProblemRep('Your conference name has to be 1 to 41 characters long. The conference name will not be changed.');
+				s1 := MConference[curForum]^^[Which].Name;
+			end
+			else if (pos(':', s1) <> 0) then
+			begin
+				ProblemRep('The name of your conference cannot contain a colon. The conference name will not be changed.');
 				s1 := MConference[curForum]^^[Which].Name;
 			end
 			else
@@ -1072,6 +1082,11 @@ implementation
 					s1 := MConference[curForum]^^[Which].EchoName;
 					if length(s1) < 1 then
 						MConference[curForum]^^[Which].ConfType := 0;
+				end
+				else if (pos(' ', s1) <> 0) then
+				begin
+					ProblemRep('Your echo name cannot contain a space. The echo name will not be changed.');
+					s1 := MConference[curForum]^^[Which].EchoName;
 				end
 				else
 				begin
