@@ -921,7 +921,7 @@ program Hermes;
 				if (TickCount - lastSSDraw > 420) then
 					DrawSSInfo;
 			end;
-			if (noUsersOn) and (not isGeneric) then
+			if (noUsersOn) and (not isGeneric) and (not arePollingWebTosser) then
 				gotEvent := WaitNextEvent(everyEvent, event, 10, cursorRgn)
 			else
 				gotEvent := WaitNextEvent(everyEvent, event, 0, cursorRgn);
@@ -1241,6 +1241,13 @@ program Hermes;
 					quit := ModalQuestion(RetInStr(1), false, false);
 			end;
 		until quit > 0;
+
+		{ Finish the current Web Tosser poll operation if one is in progress. }
+		while Mailer^^.MailerAware and (Mailer^^.SubLaunchMailer = 3) and arePollingWebTosser do
+		begin
+			DoWebTosser;
+			gotEvent := WaitNextEvent(everyEvent, event, 0, cursorRgn);
+		end;
 	end;
 
 	procedure GetFinderFiles;
