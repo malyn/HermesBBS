@@ -158,6 +158,7 @@ implementation
 					ReplaceText('%vers', stringof(HERMES_VERSION));
 					ReplaceNumber('%tcall', InitSystHand^^.numcalls);
 					ReplaceNumber('%nodes', InitSystHand^^.numnodes);
+					ReplaceNumber('%users', InitSystHand^^.NumUsers);
 					ReplaceNumber('%tctdy', TotalCalls);
 					ReplaceNumber('%tcnod', InitSystHand^^.callsToday[activeNode]);
 					ReplaceNumber('%ttmin', TotalMins);
