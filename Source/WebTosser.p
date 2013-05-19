@@ -20,11 +20,11 @@ implementation
 			result: OSerr;
 	begin
 	{ Display to the SysOp. }
-		if DebugWebTosser then
+		if DebugWebTosser or DebugWebTosserOnce then
 			OutLineSysop(logStr, true);
 
 	{ Write to the file if requested. }
-		if DebugWebTosserToFile then
+		if DebugWebTosserToFile or DebugWebTosserToFileOnce then
 		begin
 			path := concat(sharedPath, 'Misc:Web Tosser Log');
 			result := FSOpen(path, 0, logRef);

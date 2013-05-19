@@ -1716,6 +1716,8 @@ begin
 			arePollingWebTosser := false;
 			debugWebTosser := false;
 			debugWebTosserToFile := false;
+			debugWebTosserOnce := false;
+			debugWebTosserToFileOnce := false;
 			webTosserTCP.tcpPBPtr := nil;
 			webTosserTCP.tcpBuffer := nil;
 			webTosserTCP.tcpStreamPtr := nil;

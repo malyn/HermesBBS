@@ -1083,16 +1083,16 @@ implementation
 									shouldPollWebTosser := true;
 									if (BAnd(modifiers, optionKey) <> 0) then
 									begin
-										debugWebTosser := true;
+										debugWebTosserOnce := true;
 										if BAnd(modifiers, shiftKey) <> 0 then
-											debugWebTosserToFile := true
+											debugWebTosserToFileOnce := true
 										else
-											debugWebTosserToFile := false;
+											debugWebTosserToFileOnce := false;
 									end
 									else
 									begin
-										debugWebTosser := false;
-										debugWebTosserToFile := false;
+										debugWebTosserOnce := false;
+										debugWebTosserToFileOnce := false;
 									end;
 								end;
 							end;

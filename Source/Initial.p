@@ -1516,7 +1516,7 @@ interface
 		runtimeExternalNum: integer;
 { Added in 3.5.11b2 }
 		shouldPollWebTosser, arePollingWebTosser: boolean;
-		debugWebTosser, debugWebTosserToFile: boolean;
+		debugWebTosser, debugWebTosserToFile, debugWebTosserOnce, debugWebTosserToFileOnce: boolean;
 		webTosserDo, webTosserDoNext, webTosserDoNextFile: (WebTosserConnect, WebTosserConnectWait, WebTosserSendNodeNumber, WebTosserSendPassword, WebTosserSendAreasBBSHeader, WebTosserSendAreasBBSFile, WebTosserSendGenericExportHeader, WebTosserSendGenericExportFile, WebTosserSendRequestTrailer, WebTosserReceiveGenericImport, WebTosserSend, WebTosserSendFile, WebTosserSendWait, WebTosserDisconnect, WebTosserDisconnectWait, WebTosserDone);
 		webTosserTCP: HermesTCP;
 		webTosserMimeBoundary: Str63;
