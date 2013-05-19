@@ -1132,7 +1132,7 @@ implementation
 {$S HUtils6_2}
 	procedure SetBookmark;
 		var
-			WelcomeName, tempstring, tempString2, tempString3, tempString4, ts, MsgLine, fName, internetAddress: str255;
+			WelcomeName, tempstring, tempString2, tempString3, tempString4, ts, MsgLine, fName: str255;
 			tempInt, tempLong, col, tl: longInt;
 			tempDate, tempDate2, tempDate3: DateTimeRec;
 			tempChar: char;
@@ -1793,7 +1793,7 @@ implementation
 									else if (not ThisUser.CantPostAnon) and (EndAnony = -1) then
 										curprompt := 'N';
 								end;
-								EMailDo := EmailFour;
+								EMailDo := EmailFourA;
 							end
 							else
 							begin
@@ -1812,7 +1812,7 @@ implementation
 								end;
 							end;
 						end;
-						EMailFour: 
+						EMailFourA: 
 						begin
 							FromDetach := false;
 							if CurPrompt = 'Y' then
@@ -1822,6 +1822,7 @@ implementation
 							if sentAnon then
 								curEmailRec.anonyTo := true;
 							OutLine(RetInStr(83), false, 0);
+							EMailDo := EMailFourC;
 							if (MailingUser.Mailbox) and (not NetMail) and (not INetMail) then
 							begin
 								if (pos(',', MailingUser.ForwardedTo) = 0) and (pos('@', MailingUser.ForwardedTo) = 0) then
@@ -1855,16 +1856,28 @@ implementation
 									OutLine(RetInStr(298), true, 6);	{Error: Email database full.}
 							end
 							else if netMail then
-								SaveNetMail(char(0))
+								EMailDo := EMailFourB
 							else if INetMail then
 							begin
 								{ We have to save the Internet address because it will get obliterated in }
 								{ SaveNetMail and replaced with the FidoNet<->Internet gateway address }
 								{ if this BBS uses gated Internet e-mail. }
-								internetAddress := myFido.name;
+								origInternetAddress := myFido.name;
 
-								SaveNetMail(char(0));
+								EMailDo := EMailFourB;
 							end;
+						end;
+						EMailFourB: 
+						begin
+							{ We can only save the NetMail message if the Web Tosser is not polling. }
+							if not arePollingWebTosser then
+							begin
+								SaveNetMail(char(0));
+								EMailDo := EMailFourC;
+							end;
+						end;
+						EMailFourC: 
+						begin
 							if not NewFeed then
 							begin
 								if not curEmailRec.multiMail then
@@ -1873,7 +1886,7 @@ implementation
 									if netmail then
 										tempstring := concat(RetInStr(299), myFido.name, ' at node ', myFido.atNode, '.') {      Mail sent to }
 									else if inetmail then
-										tempstring := concat(RetInStr(299), internetAddress)
+										tempstring := concat(RetInStr(299), origInternetAddress)
 									else
 										tempString := concat(RetInStr(299), mailingUser.UserName, ' #', tempString2);
 									sysopLog(tempString, 0);
@@ -1916,7 +1929,7 @@ implementation
 							end
 							else if INetMail then
 							begin
-								tempstring := concat(RetInStr(301), internetAddress);	{Mail sent to }
+								tempstring := concat(RetInStr(301), origInternetAddress);	{Mail sent to }
 							end
 							else
 							begin
@@ -2342,7 +2355,7 @@ implementation
 										if WasAttach then
 											ReadDo := Read16
 										else
-											ReadDo := ReadEight;
+											ReadDo := ReadEightA;
 									end
 									else
 									begin
@@ -2362,10 +2375,11 @@ implementation
 								ReadDo := ReadFour;
 							end;
 						end;
-						ReadEight: 
+						ReadEightA: 
 						begin
 							FindMyEmail(thisUser.UserNum);
 							bCR;
+							ReadDo := ReadFour;
 							if (curPrompt = 'Y') then
 							begin
 								curEmailRec := theEmail^^[myEmailList^^[atEmail]];
@@ -2402,13 +2416,8 @@ implementation
 										begin
 											if FindUser(StringOf(curEmailRec.FromUser : 0), aUser) then
 												;
-											SaveNetMail(aUser.userName);
-											DeleteMail(myEmailList^^[atEmail]);
-											if curWriting <> nil then
-											begin
-												DisposHandle(handle(curWriting));
-												curWriting := nil;
-											end;
+											origInternetAddress := aUser.userName;
+											ReadDo := ReadEightB;
 										end
 										else
 											theEmail^^[myEmailList^^[atEmail]].storedAs := SaveMessage(curWriting, 0, 0);
@@ -2416,10 +2425,31 @@ implementation
 								end
 								else
 									theEmail^^[myEmailList^^[atEmail]].storedAs := SaveMessage(curWriting, 0, 0);
+								if ReadDo <> ReadEightB then
+								begin
+									OutLine(RetInStr(98), true, 0);
+									bCR;
+								end;
+							end;
+						end;
+						ReadEightB: 
+						begin
+							{ We can only save the NetMail message if the Web Tosser is not polling. }
+							if not arePollingWebTosser then
+							begin
+								SaveNetMail(origInternetAddress);
+								DeleteMail(myEmailList^^[atEmail]);
+								if curWriting <> nil then
+								begin
+									DisposHandle(handle(curWriting));
+									curWriting := nil;
+								end;
+
 								OutLine(RetInStr(98), true, 0);
 								bCR;
+
+								ReadDo := ReadFour;
 							end;
-							ReadDo := ReadFour;
 						end;
 						JumpForum: 
 						begin
@@ -2753,7 +2783,7 @@ implementation
 							begin
 								bCR;
 								YesNoQuestion(RetInStr(130), true);
-								ReadDo := ReadEight;
+								ReadDo := ReadEightA;
 							end
 							else
 								ReadDo := ReadFour;

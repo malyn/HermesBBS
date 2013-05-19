@@ -1262,7 +1262,7 @@ implementation
 					curPrompt := 'N';
 				if wasEMail then
 				begin
-					EmailDo := EMailFour;
+					EmailDo := EMailFourA;
 					boardSection := EMail;
 				end
 				else if wasSearching then

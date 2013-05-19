@@ -1046,8 +1046,8 @@ interface
 				BoardSection: (Logon, NewUser, MainMenu, TransferMenu, MessageMenu, ChatStage, Defaults, Email, GFiles, Utilities, EXTERNAL, rmv, MoveFiles, killMail, Batch, MultiChat, tranDef, MultiMail, Noder, messUp, renFiles, readAll, RmvFiles, UEdit, USList, BBSlist, chUser, limdate, Quote, Download, Sort, Upload, OffStage, ListFiles, post, QScan, ReadMail, Amsg, Ext, ScanNew, ListMail, ListDirs, CatchUp, AskQuestions, AttachFile, DetachFile, SysopComm, FindDesc, SlowDevice, PrintXFerTree, ChatRoom, AddrBook, PrivateRequest, MessageSearcher, Colors, TelnetNegotiation);
 				boardAction, savedBDaction, savedBD2: BDact;
 				AutoDo: (AutoOne, AutoTwo, AutoThree, AutoFour, AutoFive, AutoSix, AutoSeven);
-				ReadDo: (ReadOne, ReadTwo, ReadThree, ReadFour, ReadFive, ReadSix, ReadSeven, ReadEight, JumpForum, ReadNine, ReadTen, ReadEleven, ReadTwelve, Read13, Read14, Read15, Read16);
-				EmailDo: (WhichUser, EmailCheck, EmailOne, EmailTwo, EmailThree, EmailFour, EmailFive, EmailSix, EmailSeven, EmailEight, EmailNine, EMailTen, EMailEleven);
+				ReadDo: (ReadOne, ReadTwo, ReadThree, ReadFour, ReadFive, ReadSix, ReadSeven, ReadEightA, ReadEightB, JumpForum, ReadNine, ReadTen, ReadEleven, ReadTwelve, Read13, Read14, Read15, Read16);
+				EmailDo: (WhichUser, EmailCheck, EmailOne, EmailTwo, EmailThree, EmailFourA, EmailFourB, EmailFourC, EmailFive, EmailSix, EmailSeven, EmailEight, EmailNine, EMailTen, EMailEleven);
 				MultiDo: (MultiOne, MultiTwo, MultiThree, MultiFour);
 				MultiChatDo: (Mult1, Mult2);
 				BatDo: (BatOne, BatTwo, BatThree, BatFour, BatFive, BatSix, BatSeven, BatEight);
@@ -1145,7 +1145,8 @@ interface
 				SecLevel: Integer;
 				NodeRest, LastKey: Char;
 				_unused_Inner, FromBeg, FromDetach: Boolean;
-				msgLine, myline, qname, AttachFName: Str255;
+{ myline was renamed to origInternetAddress in 3.5.11b2 }
+				msgLine, origInternetAddress, qname, AttachFName: Str255;
 				inSubDir, TempSubDir, SubDirOpenNum: Integer;
 				NewMsg, WasAttach, WasAttachMac, WasBatch, WasAMsg: Boolean;
 				InRealDir, InRealSubDir: Integer;
