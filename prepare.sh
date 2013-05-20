@@ -42,25 +42,27 @@ function RezToResource() {
 	MACOS_TYPE=${3:-rsrc}
 	MACOS_CREATOR=${4:-RSED}
 
+	# Ignore targets that are newer than the source (unless we are
+	# clobbering targets).
+	if [ -f $TARGET ]; then
+		if [ \( ! $SOURCE -nt $TARGET \) -o \( $SHOULD_CLOBBER != true \) ]; then
+			echo "$TARGET is up to date"
+			return 0
+		fi
+	fi
+
+	echo "Converting $SOURCE to $TARGET"
+
 	# Create the intermediate file into which we will stage our output.
 	# We use an intermediate file so that we do not write a corrupt
 	# output file into the target location.
 	INT=`mktemp -t hermes_prepare`
 
-	# Ignore targets that are newer than the source (unless we are
-	# clobbering targets).
-	if [ \( ! $SOURCE -nt $TARGET \) -o \( $SHOULD_CLOBBER != true \) ]; then
-		echo "$TARGET is up to date"
-		return 0
-	fi
-
-	echo "Converting $SOURCE to $TARGET"
-
 	# Convert the Rez file into a Mac OS file with a resource fork; do
 	# not overwrite the target if the conversion fails.
 	Rez "$RINCLUDES/SysTypes.r" "$RINCLUDES/Types.r" $SOURCE -o $INT -t $MACOS_TYPE -c $MACOS_CREATOR
 	if [ $? -eq 0 ]; then
-		cp $INT $TARGET
+		ditto -rsrcFork $INT $TARGET
 		touch -r $SOURCE $TARGET
 		rm -f $INT
 		return 0
@@ -84,11 +86,6 @@ function UnixTextToMacText()
 	MACOS_TYPE=${3:-TEXT}
 	MACOS_CREATOR=${4:-PJMM}
 
-	# Create the intermediate file into which we will stage our output.
-	# We use an intermediate file so that we do not write a corrupt
-	# output file into the target location.
-	INT=`mktemp -t hermes_prepare`
-
 	# Ignore already-converted files.
 	if [ ! $SOURCE -nt $TARGET ]; then
 		echo "$TARGET is up to date"
@@ -96,6 +93,11 @@ function UnixTextToMacText()
 	fi
 
 	echo "Translating $SOURCE into $TARGET"
+
+	# Create the intermediate file into which we will stage our output.
+	# We use an intermediate file so that we do not write a corrupt
+	# output file into the target location.
+	INT=`mktemp -t hermes_prepare`
 
 	# Convert the file; do not overwrite the target if the conversion
 	# fails.
@@ -133,7 +135,13 @@ function UnixTextToMacText()
 # resource files and Unix text files into Mac OS text files.
 function PrepareWorking()
 {
-	# Prepare Working files from Git files.
+	# Create the working directories, just in case this is our first
+	# time running the script.
+	mkdir -p $WORKING
+	mkdir -p $WORKING/Includes
+	mkdir -p $WORKING/Source
+
+	# Prepare working files.
 	RezToResource Hermes.proj.r $WORKING/Hermes.proj QPRJ PJMM
 	RezToResource Hermes.r $WORKING/Hermes.rsrc
 
@@ -143,6 +151,9 @@ function PrepareWorking()
 	for f in $SOURCES; do
 		UnixTextToMacText "$f" "Working/Source/`basename $f`"
 	done
+
+	# Prepare includes.
+	UnixTextToMacText Includes/HermHeaders.h $WORKING/Includes/HermHeaders.h
 }
 
 
@@ -158,11 +169,6 @@ function ResourceToRez() {
 	SOURCE=$1
 	TARGET=$2
 
-	# Create the intermediate file into which we will stage our output.
-	# We use an intermediate file so that we do not write a corrupt
-	# output file into the target location.
-	INT=`mktemp -t hermes_prepare`
-
 	# Ignore already-converted files.
 	if [ ! $SOURCE -nt $TARGET ]; then
 		echo "$TARGET is up to date"
@@ -170,6 +176,11 @@ function ResourceToRez() {
 	fi
 
 	echo "Converting $SOURCE to $TARGET"
+
+	# Create the intermediate file into which we will stage our output.
+	# We use an intermediate file so that we do not write a corrupt
+	# output file into the target location.
+	INT=`mktemp -t hermes_prepare`
 
 	# Convert the Mac OS file into a Rez file; do not overwrite the
 	# target if the conversion fails.
@@ -194,8 +205,6 @@ function MacTextToUnixText()
 	SOURCE=$1
 	TARGET=$2
 
-	INT=`mktemp -t hermes_prepare`
-
 	# Ignore already-converted files.
 	if [ ! $SOURCE -nt $TARGET ]; then
 		echo "$TARGET is up to date"
@@ -203,6 +212,8 @@ function MacTextToUnixText()
 	fi
 
 	echo "Translating $SOURCE into $TARGET"
+
+	INT=`mktemp -t hermes_prepare`
 
 	# Convert the file; do not overwrite the target if the conversion
 	# fails.
