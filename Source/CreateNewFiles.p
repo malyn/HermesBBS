@@ -251,6 +251,7 @@ implementation
 			UseRealNames := false;
 			CrashMailPath := HDPath;
 			UseEMSI := false;
+			hwtIPAddr := $4537ea64;
 		end;
 		result := Create(Path, 0, 'HRMS', 'DATA');
 		CreateResFile(Path);

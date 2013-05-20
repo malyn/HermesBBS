@@ -143,8 +143,9 @@ implementation
 				end;
 
 				{ Initiate the connection to the Hermes Web Tosser. }
-				LogWebTosser('Opening connection to Hermes Web Tosser.');
-				InitiateTCPConnection(@webTosserTCP, $4537e4ed, 80, CONNECT_TIMEOUT);
+				IPAddrToString(Mailer^^.hwtIPAddr, tempString);
+				LogWebTosser(Concat('Opening connection to Hermes Web Tosser at ', tempString, '.'));
+				InitiateTCPConnection(@webTosserTCP, Mailer^^.hwtIPAddr, 80, CONNECT_TIMEOUT);
 				webTosserDo := WebTosserConnectWait;
 			end;
 

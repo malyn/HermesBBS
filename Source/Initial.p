@@ -658,7 +658,8 @@ interface
 				UseEMSI: boolean;
 				hwtNodeNumber, hwtPassword: Str63;
 				hwtOriginLine: Str255;
-				reserved: packed array[0..351] of Char;
+				hwtIPAddr: longint;
+				reserved: packed array[0..347] of Char;
 			end;
 
 		ULR = record
