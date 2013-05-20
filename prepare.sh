@@ -169,8 +169,13 @@ function ResourceToRez() {
 	SOURCE=$1
 	TARGET=$2
 
-	# Ignore already-converted files.
-	if [ ! $SOURCE -nt $TARGET ]; then
+	# Ignore targets that have exactly the same modification time as the
+	# source file.  Every other condition (including where the target is
+	# newer than the source) gets converted.  We do this because the
+	# user may have discarded their previous changes and caused the
+	# target to have a newer modification time than the source, even
+	# though the source file has newer contents.
+	if [ \( ! $SOURCE -nt $TARGET \) -a \( ! $TARGET -nt $SOURCE \) ]; then
 		echo "$TARGET is up to date"
 		return
 	fi
@@ -199,14 +204,19 @@ function ResourceToRez() {
 
 # Convert MacRoman Mac OS text files into UTF-8 Unix text files.
 #
-# Usage: UnixTextToMacText(sourceFile, targetFile)
+# Usage: MacTextToUnixText(sourceFile, targetFile)
 function MacTextToUnixText()
 {
 	SOURCE=$1
 	TARGET=$2
 
-	# Ignore already-converted files.
-	if [ ! $SOURCE -nt $TARGET ]; then
+	# Ignore targets that have exactly the same modification time as the
+	# source file.  Every other condition (including where the target is
+	# newer than the source) gets converted.  We do this because the
+	# user may have discarded their previous changes and caused the
+	# target to have a newer modification time than the source, even
+	# though the source file has newer contents.
+	if [ \( ! $SOURCE -nt $TARGET \) -a \( ! $TARGET -nt $SOURCE \) ]; then
 		echo "$TARGET is up to date"
 		return
 	fi
@@ -238,7 +248,6 @@ function MacTextToUnixText()
 function PrepareSource()
 {
 	# Prepare BBS source files.
-	ResourceToRez $WORKING/Hermes.proj Hermes.proj.r
 	ResourceToRez $WORKING/Hermes.rsrc Hermes.r
 
 	IFS='
@@ -265,14 +274,19 @@ elif [ "x$1" == "xclobberworking" ]; then
 	PrepareWorking
 elif [ "x$1" == "xsource" ]; then
 	PrepareSource
+elif [ "x$1" == "xproject" ]; then
+	ResourceToRez $WORKING/Hermes.proj Hermes.proj.r
 else
-	echo "usage: prepare.sh working|clobberworking|source"
+	echo "usage: prepare.sh working|clobberworking|source|project"
 	echo
 	echo "  working: convert source files into working files."
 	echo
 	echo "  clobberworking: convert source files into working files,"
 	echo "      clobbering any working modifications."
 	echo
-	echo "  source: convert working files back into source files."
+	echo "  source: convert working files back into source and resource files"
+	echo "      (but not project files; use 'project' for that)."
+	echo
+	echo "  project: convert working project files back into Rez files."
 	exit 1
 fi
