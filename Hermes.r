@@ -10330,7 +10330,7 @@ resource 'DITL' (1539, "About Box", purgeable) {
 		{150, 65, 178, 387},
 		StaticText {
 			disabled,
-			"© 1989-2009 by Michael Alyn Miller.  All"
+			"© 1989-2013 by Michael Alyn Miller.  All"
 			" rights reserved.\n                Origin"
 			"al version of Hermes by Will Price."
 		},
@@ -11930,8 +11930,6 @@ resource 'DLOG' (2, "User Edit", purgeable) {
 	0x22B8,
 	2,
 	"User Edit"
-	/****** Extra bytes follow... ******/
-	/* $"41EB"                                               /* Aë */
 };
 
 resource 'DLOG' (3, "User Edit-Main", purgeable) {
@@ -11942,8 +11940,6 @@ resource 'DLOG' (3, "User Edit-Main", purgeable) {
 	0x0,
 	3,
 	""
-	/****** Extra bytes follow... ******/
-	/* $"0000 00"                                            /* ... */
 };
 
 resource 'DLOG' (4, "Transfer Setup", purgeable) {
@@ -11954,8 +11950,6 @@ resource 'DLOG' (4, "Transfer Setup", purgeable) {
 	0x15B3,
 	4,
 	"Transfer Setup"
-	/****** Extra bytes follow... ******/
-	/* $"7280 20"                                            /* r€  */
 };
 
 resource 'DLOG' (5, "User Edit", purgeable) {
@@ -11966,8 +11960,6 @@ resource 'DLOG' (5, "User Edit", purgeable) {
 	0x22B8,
 	5,
 	"User Edit"
-	/****** Extra bytes follow... ******/
-	/* $"41EB"                                               /* Aë */
 };
 
 resource 'DLOG' (6, "User Edit", purgeable) {
@@ -11978,8 +11970,6 @@ resource 'DLOG' (6, "User Edit", purgeable) {
 	0x22B8,
 	6,
 	"User Edit"
-	/****** Extra bytes follow... ******/
-	/* $"41EB"                                               /* Aë */
 };
 
 resource 'DLOG' (80, "String Editor", purgeable) {
@@ -12000,8 +11990,6 @@ resource 'DLOG' (128, "Registration Information", purgeable) {
 	0x0,
 	128,
 	"Registration Information"
-	/****** Extra bytes follow... ******/
-	/* $"0030 0A"                                            /* .0Â */
 };
 
 resource 'DLOG' (150, "User Manager", purgeable) {
@@ -12022,8 +12010,6 @@ resource 'DLOG' (175, "Message Setup", purgeable) {
 	0xAF,
 	175,
 	"Message Setup"
-	/****** Extra bytes follow... ******/
-	/* $"280A"                                               /* (Â */
 };
 
 resource 'DLOG' (176, "Forum Setup", purgeable) {
@@ -12034,8 +12020,6 @@ resource 'DLOG' (176, "Forum Setup", purgeable) {
 	0x0,
 	176,
 	"Forum Setup"
-	/****** Extra bytes follow... ******/
-	/* $"280A"                                               /* (Â */
 };
 
 resource 'DLOG' (177, "Conference Setup", purgeable) {
@@ -12046,8 +12030,6 @@ resource 'DLOG' (177, "Conference Setup", purgeable) {
 	0xB1,
 	177,
 	"Conference Setup"
-	/****** Extra bytes follow... ******/
-	/* $"0028 0A"                                            /* .(Â */
 };
 
 resource 'DLOG' (178, "Misc. Dialog", purgeable) {
@@ -12058,8 +12040,6 @@ resource 'DLOG' (178, "Misc. Dialog", purgeable) {
 	0x0,
 	178,
 	"Misc. Dialog"
-	/****** Extra bytes follow... ******/
-	/* $"6C28 0A"                                            /* l(Â */
 };
 
 resource 'DLOG' (179, "Flow Control", purgeable) {
@@ -12080,8 +12060,6 @@ resource 'DLOG' (200, "Background Import", purgeable) {
 	0x0,
 	200,
 	"Background Message Importing"
-	/****** Extra bytes follow... ******/
-	/* $"B328 0A"                                            /* ³(Â */
 };
 
 resource 'DLOG' (206, "File Dialog Box", purgeable) {
@@ -12092,8 +12070,6 @@ resource 'DLOG' (206, "File Dialog Box", purgeable) {
 	0x0,
 	206,
 	""
-	/****** Extra bytes follow... ******/
-	/* $"0028 0A"                                            /* .(Â */
 };
 
 resource 'DLOG' (209, "Board Edit", purgeable) {
@@ -12114,8 +12090,6 @@ resource 'DLOG' (222, "Directory Setup", purgeable) {
 	0x0,
 	222,
 	"Directory Setup"
-	/****** Extra bytes follow... ******/
-	/* $"0000"                                               /* .. */
 };
 
 resource 'DLOG' (228, "Move File", purgeable) {
@@ -12136,8 +12110,6 @@ resource 'DLOG' (235, "Quoter Setup", purgeable) {
 	0xEB,
 	235,
 	"Quoter Setup"
-	/****** Extra bytes follow... ******/
-	/* $"0028 0A"                                            /* .(Â */
 };
 
 resource 'DLOG' (250, "Mailer Preferences", purgeable) {
@@ -12148,8 +12120,6 @@ resource 'DLOG' (250, "Mailer Preferences", purgeable) {
 	0xFA,
 	250,
 	"Mailer Preferences"
-	/****** Extra bytes follow... ******/
-	/* $"0000 00"                                            /* ... */
 };
 
 resource 'DLOG' (260, "Screen Saver Lock", purgeable) {
@@ -12160,8 +12130,6 @@ resource 'DLOG' (260, "Screen Saver Lock", purgeable) {
 	0x104,
 	260,
 	""
-	/****** Extra bytes follow... ******/
-	/* $"2028 0A"                                            /*  (Â */
 };
 
 resource 'DLOG' (265, "Chat Room Setup", purgeable) {
@@ -12172,8 +12140,6 @@ resource 'DLOG' (265, "Chat Room Setup", purgeable) {
 	0x109,
 	265,
 	"Chat Room Setup"
-	/****** Extra bytes follow... ******/
-	/* $"280A"                                               /* (Â */
 };
 
 resource 'DLOG' (270, "Error Window", purgeable) {
@@ -12184,8 +12150,6 @@ resource 'DLOG' (270, "Error Window", purgeable) {
 	0x10E,
 	270,
 	"Error Log"
-	/****** Extra bytes follow... ******/
-	/* $"280A"                                               /* (Â */
 };
 
 resource 'DLOG' (277, "System Preferences", purgeable) {
@@ -12196,8 +12160,6 @@ resource 'DLOG' (277, "System Preferences", purgeable) {
 	0x115,
 	277,
 	"System Preferences"
-	/****** Extra bytes follow... ******/
-	/* $"0000 00"                                            /* ... */
 };
 
 resource 'DLOG' (300, "Area Setup", purgeable) {
@@ -12248,8 +12210,6 @@ resource 'DLOG' (666, "Menu Preferences", purgeable) {
 	0x1158,
 	666,
 	"Main Menu Preferences"
-	/****** Extra bytes follow... ******/
-	/* $"0000"                                               /* .. */
 };
 
 resource 'DLOG' (667, "Transfer Menu Preferences", purgeable) {
@@ -12260,8 +12220,6 @@ resource 'DLOG' (667, "Transfer Menu Preferences", purgeable) {
 	0x1157,
 	667,
 	"Transfer Menu Preferences"
-	/****** Extra bytes follow... ******/
-	/* $"B6DB"                                               /* ¶Û */
 };
 
 resource 'DLOG' (744, purgeable) {
@@ -12282,8 +12240,6 @@ resource 'DLOG' (745, "Node Preferences", purgeable) {
 	0x115C,
 	745,
 	"Node Preferences"
-	/****** Extra bytes follow... ******/
-	/* $"0046 6F"                                            /* .Fo */
 };
 
 resource 'DLOG' (777, purgeable) {
@@ -12314,8 +12270,6 @@ resource 'DLOG' (799, "Security", purgeable) {
 	0x11B15,
 	799,
 	"Security Setup"
-	/****** Extra bytes follow... ******/
-	/* $"0000 00"                                            /* ... */
 };
 
 resource 'DLOG' (900, purgeable) {
@@ -12326,8 +12280,6 @@ resource 'DLOG' (900, purgeable) {
 	0x0,
 	900,
 	"  "
-	/****** Extra bytes follow... ******/
-	/* $"0028 0A"                                            /* .(Â */
 };
 
 resource 'DLOG' (982, "Transfers", purgeable) {
@@ -12399,7 +12351,7 @@ resource 'DLOG' (1539, "About Box", purgeable) {
 	1539,
 	"About"
 	/****** Extra bytes follow... ******/
-	/* $"280A"                                               /* (Â */
+	/* $"C8B0"                                               /* È° */
 };
 
 resource 'DLOG' (1541, "SysOp Externals", purgeable) {
@@ -12440,8 +12392,6 @@ resource 'DLOG' (1600, "New User", purgeable) {
 	0x320,
 	1600,
 	"New User Setup"
-	/****** Extra bytes follow... ******/
-	/* $"0000 00"                                            /* ... */
 };
 
 resource 'DLOG' (1700, "Export Users", purgeable) {
@@ -12452,8 +12402,6 @@ resource 'DLOG' (1700, "Export Users", purgeable) {
 	0x0,
 	1700,
 	""
-	/****** Extra bytes follow... ******/
-	/* $"0000 00"                                            /* ... */
 };
 
 resource 'DLOG' (1701, "Exporting Status", purgeable) {
@@ -12504,8 +12452,6 @@ resource 'DLOG' (4002, purgeable) {
 	0x0,
 	4002,
 	""
-	/****** Extra bytes follow... ******/
-	/* $"0028 0A"                                            /* .(Â */
 };
 
 resource 'DLOG' (4003, purgeable) {
@@ -12516,8 +12462,6 @@ resource 'DLOG' (4003, purgeable) {
 	0x0,
 	4003,
 	""
-	/****** Extra bytes follow... ******/
-	/* $"0028 0A"                                            /* .(Â */
 };
 
 resource 'DLOG' (4995, "User List", purgeable) {
@@ -12528,8 +12472,6 @@ resource 'DLOG' (4995, "User List", purgeable) {
 	0x1383,
 	4995,
 	"User List"
-	/****** Extra bytes follow... ******/
-	/* $"3828"                                               /* 8( */
 };
 
 resource 'DLOG' (6767, purgeable) {
@@ -33442,22 +33384,22 @@ data 'nBBS' (134, "Transfer Menu Prefs") {
 resource 'vers' (1) {
 	0x3,
 	0x5B,
-	beta,
-	0x2,
+	release,
+	0x0,
 	verUS,
-	"3.5.11b2",
-	"© 1989-2009 by Michael Alyn Miller\nAll r"
+	"3.5.11",
+	"© 1989-2013 by Michael Alyn Miller\nAll r"
 	"ights reserved."
 };
 
 resource 'vers' (2) {
 	0x3,
 	0x5B,
-	beta,
-	0x2,
+	release,
+	0x0,
 	verUS,
-	"3.5.11b2",
+	"3.5.11",
 	"Hermes II Bulletin Board System Version "
-	"3.5.11b2"
+	"3.5.11"
 };
 

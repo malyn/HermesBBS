@@ -935,13 +935,47 @@ implementation
 					else if (CurPrompt = '//VER') or (CurPrompt = '//VERSION') then
 					begin
 						OutLineC(concat('Hermes II Bulletin Board System Version ', HERMES_VERSION), true, 2);
-						OutLineC('Copyright 1989-2009 by Michael Alyn Miller.  All rights reserved.', true, 2);
+						bCR;
+						OutLineC('Copyright 1989-2013 by Michael Alyn Miller.  All rights reserved.', true, 2);
+						OutLineC('Type //LICENSE for full copyright statement.', true, 2);
+						bCR;
 						OutLineC('Original version of Hermes by Will Price.', true, 2);
 						bCR;
 						OutLineC('http://www.HermesBBS.com/', true, 1);
 						bCR;
 						OutLineC(concat('Compiled on ', compdate, ' at ', comptime), true, 2);
 						bCR;
+						bCR;
+						PAUSEPrompt(RetInStr(7));
+						savedBdAction := none;
+					end
+					else if CurPrompt = '//LICENSE' then
+					begin
+						OutLine('Copyright (c) 1989-2013, Michael Alyn Miller <malyn@strangeGizmo.com>', true, 2);
+						OutLine('All rights reserved.', true, 2);
+						bCR;
+						OutLine('Redistribution and use in source and binary forms, with or without', true, 2);
+						OutLine('modification, are permitted provided that the following conditions are met:', true, 2);
+						bCR;
+						OutLine('1. Redistributions of source code must retain the above copyright notice', true, 2);
+						OutLine('   unmodified, this list of conditions, and the following disclaimer.', true, 2);
+						OutLine('2. Redistributions in binary form must reproduce the above copyright notice,', true, 2);
+						OutLine('   this list of conditions and the following disclaimer in the documentation', true, 2);
+						OutLine('   and/or other materials provided with the distribution.', true, 2);
+						OutLine('3. Neither the name of Michael Alyn Miller nor the names of the contributors to', true, 2);
+						OutLine('   this software may be used to endorse or promote products derived from this', true, 2);
+						OutLine('   software without specific prior written permission.', true, 2);
+						bCR;
+						OutLine('THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS "AS IS" AND ANY', true, 2);
+						OutLine('EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED', true, 2);
+						OutLine('WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE', true, 2);
+						OutLine('DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR ANY', true, 2);
+						OutLine('DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES', true, 2);
+						OutLine('(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;', true, 2);
+						OutLine('LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON', true, 2);
+						OutLine('ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT', true, 2);
+						OutLine('(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS', true, 2);
+						OutLine('SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.', true, 2);
 						bCR;
 						PAUSEPrompt(RetInStr(7));
 						savedBdAction := none;

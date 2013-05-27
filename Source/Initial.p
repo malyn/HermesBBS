@@ -6,7 +6,7 @@ interface
 	uses
 		Serial, Sound, AppleTalk, ADSP, CommResources, CRMSerialDevices, CTBUtilities, GestaltEqu, TCPTypes;
 	const
-		HERMES_VERSION = '3.5.11b2';
+		HERMES_VERSION = '3.5.11';
 		SYSTREC_VERSION = 359;
 		EXTERNALS_VERSION = 330;
 		MAX_NODES = 10;
